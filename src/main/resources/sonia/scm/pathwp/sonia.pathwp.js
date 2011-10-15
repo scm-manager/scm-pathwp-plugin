@@ -58,6 +58,8 @@ Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
         field: 'path'
       }
     });
+    
+    this.loadPathwpPermissions(this.pathwpStore, this.item);
   
     var selectionModel = new Ext.grid.RowSelectionModel({
       singleSelect: true
@@ -140,6 +142,44 @@ Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
     
     Ext.apply(this, Ext.apply(this.initialConfig, config));
     Sonia.pathwp.ConfigPanel.superclass.initComponent.apply(this, arguments);
+  }, 
+  
+  loadPathwpPermissions: function(store, repository){
+    if (debug){
+      console.debug('load pathpw properties');
+    }
+    if (!repository.properties){
+      repository.properties = [];
+    }
+    Ext.each(repository.properties, function(prop){
+      if ( prop.key == 'pathwp.permissions' ){
+        // todo load
+      }
+    });
+  },
+  
+  storeExtraProperties: function(repository){
+    if (debug){
+      console.debug('store pathpw properties');
+    }
+    var permissionString = '';
+    this.pathwpStore.data.each(function(r){
+      var p = r.data;
+      permissionString += '[' + p.path + ',';
+      if (p.group){
+        permissionString += '@';
+      }
+      permissionString += name + ']';
+    });
+    
+    if (debug){
+      console.debug('add pathwp permission string: ' + permissionString);
+    }
+    
+    repository.properties.push({
+      key: 'pathwp.permissions',
+      value: permissionString
+    });
   }
   
 });
