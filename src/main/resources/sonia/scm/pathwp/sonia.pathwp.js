@@ -35,9 +35,59 @@ Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
   
   formTitleText: 'Path Write Protection',
   enabledText: 'Enable',
+  colPathText: 'Path',
+  colNameText: 'Name',
+  colGroupText: 'Is Group',
+  addText: 'Add',
+  removeTest: 'Remove',
+  
+  addIcon: 'resources/images/add.gif',
+  removeIcon: 'resources/images/delete.gif',
+  
+  pathwpStore: null,
   
   initComponent: function(){
-    
+    this.pathwpStore = new Ext.data.ArrayStore({
+      root: 'permissions',
+      fields: [
+        {name: 'path'},
+        {name: 'name'},
+        {name: 'group', type: 'boolean'}
+      ],
+      sortInfo: {
+        field: 'path'
+      }
+    });
+  
+    var selectionModel = new Ext.grid.RowSelectionModel({
+      singleSelect: true
+    });
+  
+    var pathwpColModel = new Ext.grid.ColumnModel({
+      defaults: {
+        sortable: true,
+        editable: true
+      },
+      columns: [{
+        id: 'path',
+        dataIndex: 'path',
+        header: this.colPathText,
+        editor: Ext.form.TextField
+      },{
+        id: 'name',
+        dataIndex: 'name',
+        header: this.colNameText,
+        editor: Ext.form.TextField
+      },{
+        id: 'group',
+        dataIndex: 'group',
+        xtype: 'checkcolumn',
+        header: this.colGroupText,
+        width: 40,
+        editable: true
+      }]
+    });
+
     var config = {
       title: this.formTitleText,
       items: [{
@@ -46,6 +96,45 @@ Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
         name: 'pathwpEnabled',
         inputValue: 'true',
         property: 'pathwp.enabled'
+      },{
+        id: 'pathwpGrid',
+        xtype: 'editorgrid',
+        clicksToEdit: 1,
+        autoExpandColumn: 'path',
+        frame: true,
+        width: '100%',
+        autoHeight: true,
+        autoScroll: false,
+        colModel: pathwpColModel,
+        sm: selectionModel,
+        store: this.pathwpStore,
+        viewConfig: {
+          forceFit:true
+        },
+        tbar: [{
+          text: this.addText,
+          scope: this,
+          icon: this.addIcon,
+          handler : function(){
+            var Permission = this.pathwpStore.recordType;
+            var p = new Permission();
+            var grid = Ext.getCmp('pathwpGrid');
+            grid.stopEditing();
+            this.pathwpStore.insert(0, p);
+            grid.startEditing(0, 0);
+          }
+        },{
+          text: this.removeText,
+          scope: this,
+          icon: this.removeIcon,
+          handler: function(){
+            var grid = Ext.getCmp('pathwpGrid');
+            var selected = grid.getSelectionModel().getSelected();
+            if ( selected ){
+              this.pathwpStore.remove(selected);
+            }
+          }
+        }]
       }]
     };
     
