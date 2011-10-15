@@ -44,9 +44,12 @@ import org.slf4j.LoggerFactory;
 import sonia.scm.plugin.ext.Extension;
 import sonia.scm.repository.Changeset;
 import sonia.scm.repository.Modifications;
+import sonia.scm.repository.PermissionType;
+import sonia.scm.repository.PermissionUtil;
 import sonia.scm.repository.PreReceiveRepositoryHook;
 import sonia.scm.repository.Repository;
 import sonia.scm.repository.RepositoryHookEvent;
+import sonia.scm.security.ScmSecurityException;
 import sonia.scm.util.SecurityUtil;
 import sonia.scm.util.Util;
 import sonia.scm.web.security.WebSecurityContext;
@@ -101,13 +104,15 @@ public class PathWPHook extends PreReceiveRepositoryHook
   @Override
   public void onEvent(RepositoryHookEvent event)
   {
-    if (!SecurityUtil.isAdmin(securityContextProvider))
+    if (!SecurityUtil.isAdmin(securityContextProvider)
+        || PermissionUtil.hasPermission(event.getRepository(),
+          securityContextProvider, PermissionType.OWNER))
     {
       handleEvent(event);
     }
     else if (logger.isTraceEnabled())
     {
-      logger.trace("skip pathwp permissions for admin");
+      logger.trace("skip pathwp permissions for admins and owners");
     }
   }
 
@@ -182,9 +187,14 @@ public class PathWPHook extends PreReceiveRepositoryHook
 
         handlePermissions(permissions, event.getChangesets());
       }
-      else if (logger.isDebugEnabled())
+      else
       {
-        logger.debug("no pathwp permissions to handle");
+        if (logger.isWarnEnabled())
+        {
+          logger.debug("no pathwp permissions to handle, access denied");
+        }
+
+        throw new ScmSecurityException("not enough permissions");
       }
     }
     else if (logger.isDebugEnabled())
@@ -211,6 +221,7 @@ public class PathWPHook extends PreReceiveRepositoryHook
     {
       String permPath = permission.getPath();
 
+      // TODO fix check
       if (isMatching(permPath, path))
       {
         if (!isPrivileged(permission))
