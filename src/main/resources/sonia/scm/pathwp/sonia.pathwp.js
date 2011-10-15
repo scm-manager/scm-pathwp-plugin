@@ -153,8 +153,38 @@ Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
     }
     Ext.each(repository.properties, function(prop){
       if ( prop.key == 'pathwp.permissions' ){
-        // todo load
+        var value = prop.value;
+        this.parsePermissions(store, value);
       }
+    }, this);
+  },
+  
+  parsePermissions: function(store, permString){
+    var parts = /\[[^,]+,[^,]+\]/g.exec(permString);
+    parts = permString.match(/\[[^,]+,[^,]+\]/g);
+    if (debug){
+      console.debug('path permissions:');
+      console.debug( parts );
+    }
+    Ext.each(parts, function(part){
+      part = part.substring(1, part.length -1);
+      var pa = part.split(',');
+      var group = false;
+      if ( pa[1].indexOf('@') == 0 ){
+        group = true;
+        pa[1] = pa[1].substring(1);
+      }
+      var Permission = store.recordType;
+      var p = new Permission({
+        path: pa[0],
+        group: group,
+        name: pa[1]
+      });
+      if (debug){
+        console.debug( 'add permission: ' );
+        console.debug( p );
+      }
+      store.add(p);
     });
   },
   
@@ -177,7 +207,7 @@ Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
       if (p.group){
         permissionString += '@';
       }
-      permissionString += name + ']';
+      permissionString += p.name + ']';
     });
     
     if (debug){
