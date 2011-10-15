@@ -50,6 +50,7 @@ import sonia.scm.repository.PreReceiveRepositoryHook;
 import sonia.scm.repository.Repository;
 import sonia.scm.repository.RepositoryHookEvent;
 import sonia.scm.security.ScmSecurityException;
+import sonia.scm.util.GlobUtil;
 import sonia.scm.util.SecurityUtil;
 import sonia.scm.util.Util;
 import sonia.scm.web.security.WebSecurityContext;
@@ -290,7 +291,7 @@ public class PathWPHook extends PreReceiveRepositoryHook
    */
   private boolean isMatching(String permPath, String path)
   {
-    return permPath.equals(path);
+    return GlobUtil.matches(permPath, path);
   }
 
   /**
