@@ -218,22 +218,30 @@ public class PathWPHook extends PreReceiveRepositoryHook
       logger.trace("handle pathwp permission for {}", path);
     }
 
+    boolean privileged = false;
+
     for (PathWPPermission permission : permissions)
     {
       String permPath = permission.getPath();
 
-      // TODO fix check
       if (isMatching(permPath, path))
       {
-        if (!isPrivileged(permission))
+        if (isPrivileged(permission))
         {
-          throw new SecurityException("not enough permissions");
+          privileged = true;
+
+          break;
         }
       }
       else if (logger.isTraceEnabled())
       {
         logger.trace("permission {} does not match for {}", permission, path);
       }
+    }
+
+    if (!privileged)
+    {
+      throw new SecurityException("not enough permissions");
     }
   }
 
