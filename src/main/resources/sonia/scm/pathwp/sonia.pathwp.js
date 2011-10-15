@@ -162,6 +162,14 @@ Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
     if (debug){
       console.debug('store pathpw properties');
     }
+    
+    // delete old permissions
+    Ext.each(repository.properties, function(prop, index){
+      if ( prop.key == 'pathwp.permissions' ){
+        delete repository.properties[index];
+      }
+    });
+    
     var permissionString = '';
     this.pathwpStore.data.each(function(r){
       var p = r.data;
