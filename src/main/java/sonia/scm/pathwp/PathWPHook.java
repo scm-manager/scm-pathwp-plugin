@@ -70,7 +70,7 @@ public class PathWPHook extends PreReceiveRepositoryHook
 {
 
   /** Field description */
-  public static final String PROPERTY_ENABLE = "pathwp.enable";
+  public static final String PROPERTY_ENABLE = "pathwp.enabled";
 
   /** Field description */
   public static final String PROPERTY_PERMISSIONS = "pathwp.permissions";

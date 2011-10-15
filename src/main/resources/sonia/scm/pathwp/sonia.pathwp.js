@@ -34,12 +34,19 @@ Ext.ns('Sonia.pathwp');
 Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
   
   formTitleText: 'Path Write Protection',
+  enabledText: 'Enable',
   
   initComponent: function(){
     
     var config = {
       title: this.formTitleText,
-      items: []
+      items: [{
+        xtype: 'checkbox',
+        fieldLabel: this.enabledText,
+        name: 'pathwpEnabled',
+        inputValue: 'true',
+        property: 'pathwp.enabled'
+      }]
     };
     
     Ext.apply(this, Ext.apply(this.initialConfig, config));
