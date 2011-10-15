@@ -111,9 +111,9 @@ public class PathWPHook extends PreReceiveRepositoryHook
     {
       handleEvent(event);
     }
-    else if (logger.isTraceEnabled())
+    else if (logger.isDebugEnabled())
     {
-      logger.trace("skip pathwp permissions for admins and owners");
+      logger.debug("skip pathwp permissions for admins and owners");
     }
   }
 
@@ -222,6 +222,11 @@ public class PathWPHook extends PreReceiveRepositoryHook
 
     for (PathWPPermission permission : permissions)
     {
+      if (logger.isTraceEnabled())
+      {
+        logger.debug("check permission {} for path {}", permission, path);
+      }
+
       String permPath = permission.getPath();
 
       if (isMatching(permPath, path))
@@ -269,7 +274,10 @@ public class PathWPHook extends PreReceiveRepositoryHook
 
     for (String path : pathSet)
     {
-      handlePermission(permissions, path);
+      if (Util.isNotEmpty(path))
+      {
+        handlePermission(permissions, path);
+      }
     }
   }
 
@@ -314,6 +322,11 @@ public class PathWPHook extends PreReceiveRepositoryHook
   {
     boolean privileged = false;
     WebSecurityContext context = securityContextProvider.get();
+
+    if (logger.isTraceEnabled())
+    {
+      logger.trace("check permission for {}", context.getUser());
+    }
 
     if (permission.isGroup())
     {
