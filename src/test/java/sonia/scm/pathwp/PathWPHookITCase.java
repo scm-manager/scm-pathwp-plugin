@@ -39,6 +39,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import sonia.scm.repository.client.RepositoryClient;
+import sonia.scm.repository.client.RepositoryClientException;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  * @author Sebastian Sdorra
@@ -56,6 +64,9 @@ public class PathWPHookITCase extends AbstractTestBase
   public PathWPHookITCase(String type)
   {
     super(type);
+    System.out.println("====================================================");
+    System.out.append("start tests for type ").println(type);
+    System.out.println("====================================================");
   }
 
   //~--- methods --------------------------------------------------------------
@@ -63,16 +74,21 @@ public class PathWPHookITCase extends AbstractTestBase
   /**
    * Method description
    *
+   *
+   * @throws IOException
+   * @throws RepositoryClientException
    */
-  @Test
-  public void simpleTest()
+  @Test(expected = RepositoryClientException.class)
+  public void onlyEnbledTest() throws RepositoryClientException, IOException
   {
-    StringBuilder perms = new StringBuilder();
+    setPathWPPermissions("");
 
-    perms.append("[/bla/*,").append(user.getName()).append("]");
-    perms.append("[/blub/*,").append(user.getName()).append("]");
-    repository.setProperty(PathWPHook.PROPERTY_ENABLE, Boolean.TRUE.toString());
-    repository.setProperty(PathWPHook.PROPERTY_PERMISSIONS, perms.toString());
-    adminSession.getRepositoryHandler().modify(repository);
+    RepositoryClient client = createRepositoryClient();
+    File directory = client.getLocalRepository();
+    File file = new File(directory, "test.txt");
+
+    addContent(file);
+    client.add("test.txt");
+    client.commit("added test.txt");
   }
 }

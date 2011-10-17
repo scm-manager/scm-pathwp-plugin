@@ -37,27 +37,35 @@ package sonia.scm.pathwp;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runners.Parameterized.Parameters;
 
 import sonia.scm.ScmState;
 import sonia.scm.Type;
 import sonia.scm.client.ScmClient;
 import sonia.scm.client.ScmClientSession;
-import sonia.scm.client.UserClientHandler;
 import sonia.scm.repository.Permission;
 import sonia.scm.repository.PermissionType;
 import sonia.scm.repository.Repository;
 import sonia.scm.repository.RepositoryTestData;
+import sonia.scm.repository.client.RepositoryClient;
+import sonia.scm.repository.client.RepositoryClientException;
+import sonia.scm.repository.client.RepositoryClientFactory;
 import sonia.scm.user.User;
 import sonia.scm.user.UserTestData;
 import sonia.scm.util.IOUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  *
@@ -151,7 +159,69 @@ public class AbstractTestBase
     adminSession.getRepositoryHandler().create(repository);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param file
+   *
+   * @throws IOException
+   */
+  protected void addContent(File file) throws IOException
+  {
+    PrintWriter writer = null;
+
+    try
+    {
+      writer = new PrintWriter(file);
+      writer.println(UUID.randomUUID().toString());
+    }
+    finally
+    {
+      IOUtil.close(writer);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   *
+   * @throws RepositoryClientException
+   */
+  protected RepositoryClient createRepositoryClient()
+          throws RepositoryClientException
+  {
+    RepositoryClient client = RepositoryClientFactory.createClient(type,
+                                tempFolder.getRoot(), repository.getUrl(),
+                                user.getName(), "scmittest");
+
+    client.checkout();
+
+    return client;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param perms
+   */
+  protected void setPathWPPermissions(String perms)
+  {
+    repository.setProperty(PathWPHook.PROPERTY_ENABLE, Boolean.TRUE.toString());
+    repository.setProperty(PathWPHook.PROPERTY_PERMISSIONS, perms.toString());
+    adminSession.getRepositoryHandler().modify(repository);
+  }
+
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Rule
+  public TemporaryFolder tempFolder = new TemporaryFolder();
 
   /** Field description */
   protected ScmClientSession adminSession;
