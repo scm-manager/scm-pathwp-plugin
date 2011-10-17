@@ -79,7 +79,7 @@ public class PathWPHookITCase extends AbstractTestBase
    * @throws RepositoryClientException
    */
   @Test(expected = RepositoryClientException.class)
-  public void onlyEnbledTest() throws RepositoryClientException, IOException
+  public void onlyEnabledTest() throws RepositoryClientException, IOException
   {
     setPathWPPermissions("");
 
