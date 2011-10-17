@@ -27,7 +27,14 @@
     <dependency>
       <groupId>sonia.scm.clients</groupId>
       <artifactId>scm-client-impl</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>sonia.scm</groupId>
+      <artifactId>scm-test</artifactId>
+      <version>${project.parent.version}</version>
       <scope>test</scope>
     </dependency>
     
@@ -53,32 +60,6 @@
           
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.3</version>
-            <executions>
-              <execution>
-                <phase>package</phase>
-                <goals>
-                  <goal>copy</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>sonia.scm</groupId>
-                      <artifactId>scm-webapp</artifactId>
-                      <version>${project.version}</version>
-                      <type>war</type>
-                      <outputDirectory>${project.build.directory}/webapp</outputDirectory>
-                      <destFileName>scm-webapp.war</destFileName>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
             <version>2.9</version>
             <executions>
@@ -98,46 +79,23 @@
           </plugin>
       
           <plugin>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>maven-jetty-plugin</artifactId>
-            <version>6.1.26</version>
+            <groupId>sonia.scm.maven</groupId>
+            <artifactId>scm-maven-plugin</artifactId>
+            <version>${project.parent.version}</version>
             <configuration>
-              <stopPort>8085</stopPort>
-              <stopKey>STOP</stopKey>
-              <systemProperties>
-                <systemProperty>
-                  <name>scm.home</name>
-                  <value>target/scm-it</value>
-                </systemProperty>
-                <systemProperty>
-                  <name>file.encoding</name>
-                  <value>UTF-8</value>
-                </systemProperty>
-              </systemProperties>
-              <connectors>
-                <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                  <port>8081</port>
-                  <maxIdleTime>60000</maxIdleTime>
-                </connector>
-              </connectors>
-              <contextPath>/scm</contextPath>
-              <webApp>${project.build.directory}/webapp/scm-webapp.war</webApp>
-              <source>${project.build.javaLevel}</source>
-              <target>${project.build.javaLevel}</target>
-              <encoding>${project.build.sourceEncoding}</encoding>
-              <scanIntervalSeconds>0</scanIntervalSeconds>
-              <daemon>true</daemon>
+              <backgroud>true</backgroud>
+              <openBrowser>false</openBrowser>
             </configuration>
             <executions>
               <execution>
-                <id>start-jetty</id>
+                <id>start-scm-webapp</id>
                 <phase>pre-integration-test</phase>
                 <goals>
-                  <goal>deploy-war</goal>
+                  <goal>run</goal>
                 </goals>
               </execution>
               <execution>
-                <id>stop-jetty</id>
+                <id>stop-scm-webapp</id>
                 <phase>post-integration-test</phase>
                 <goals>
                   <goal>stop</goal>
