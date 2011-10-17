@@ -213,16 +213,16 @@ public class PathWPHook extends PreReceiveRepositoryHook
    */
   private void handlePermission(List<PathWPPermission> permissions, String path)
   {
-    if (logger.isTraceEnabled())
+    if (logger.isDebugEnabled())
     {
-      logger.trace("handle pathwp permission for {}", path);
+      logger.debug("handle pathwp permission for {}", path);
     }
 
     boolean privileged = false;
 
     for (PathWPPermission permission : permissions)
     {
-      if (logger.isTraceEnabled())
+      if (logger.isDebugEnabled())
       {
         logger.debug("check permission {} for path {}", permission, path);
       }
@@ -238,9 +238,9 @@ public class PathWPHook extends PreReceiveRepositoryHook
           break;
         }
       }
-      else if (logger.isTraceEnabled())
+      else if (logger.isDebugEnabled())
       {
-        logger.trace("permission {} does not match for {}", permission, path);
+        logger.debug("permission {} does not match for {}", permission, path);
       }
     }
 
@@ -323,9 +323,9 @@ public class PathWPHook extends PreReceiveRepositoryHook
     boolean privileged = false;
     WebSecurityContext context = securityContextProvider.get();
 
-    if (logger.isTraceEnabled())
+    if (logger.isDebugEnabled())
     {
-      logger.trace("check permission for {}", context.getUser());
+      logger.debug("check permission for {}", context.getUser());
     }
 
     if (permission.isGroup())
