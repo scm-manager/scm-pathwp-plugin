@@ -156,7 +156,15 @@ public class PathWPHook extends PreReceiveRepositoryHook
           append(pathSet, m.getModified());
           append(pathSet, m.getRemoved());
         }
+        else if (logger.isWarnEnabled())
+        {
+          logger.warn("no modifications found");
+        }
       }
+    }
+    else if (logger.isWarnEnabled())
+    {
+      logger.warn("not changesets found");
     }
 
     return pathSet;
@@ -231,11 +239,25 @@ public class PathWPHook extends PreReceiveRepositoryHook
 
       if (isMatching(permPath, path))
       {
+        if (logger.isDebugEnabled())
+        {
+          logger.debug("permission {} match for {}", permission, path);
+        }
+
         if (isPrivileged(permission))
         {
+          if (logger.isDebugEnabled())
+          {
+            logger.debug("user is privileged");
+          }
+
           privileged = true;
 
           break;
+        }
+        else if (logger.isDebugEnabled())
+        {
+          logger.debug("user is not privileged");
         }
       }
       else if (logger.isDebugEnabled())
@@ -325,7 +347,7 @@ public class PathWPHook extends PreReceiveRepositoryHook
 
     if (logger.isDebugEnabled())
     {
-      logger.debug("check permission for {}", context.getUser());
+      logger.debug("check permission for user {}", context.getUser().getName());
     }
 
     if (permission.isGroup())

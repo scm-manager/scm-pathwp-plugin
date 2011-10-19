@@ -45,6 +45,7 @@ import sonia.scm.repository.client.RepositoryClientException;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -82,6 +83,33 @@ public class PathWPHookITCase extends AbstractTestBase
   public void onlyEnabledTest() throws RepositoryClientException, IOException
   {
     setPathWPPermissions("");
+
+    RepositoryClient client = createRepositoryClient();
+    File directory = client.getLocalRepository();
+    File file = new File(directory, "test.txt");
+
+    addContent(file);
+    client.add("test.txt");
+    client.commit("added test.txt");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @throws FileNotFoundException
+   * @throws IOException
+   * @throws RepositoryClientException
+   */
+  @Test(expected = RepositoryClientException.class)
+  public void simpleDenyTest()
+          throws RepositoryClientException, FileNotFoundException, IOException
+  {
+    StringBuilder perms = new StringBuilder();
+
+    perms.append("[bla/*,").append(user.getName()).append("]");
+    perms.append("[blub/*,").append(user.getName()).append("]");
+    setPathWPPermissions(perms.toString());
 
     RepositoryClient client = createRepositoryClient();
     File directory = client.getLocalRepository();
