@@ -298,6 +298,13 @@ public class PathWPHook extends PreReceiveRepositoryHook
     {
       if (Util.isNotEmpty(path))
       {
+
+        // remove leading slash
+        if (path.startsWith("/"))
+        {
+          path = path.substring(1);
+        }
+
         handlePermission(permissions, path);
       }
     }

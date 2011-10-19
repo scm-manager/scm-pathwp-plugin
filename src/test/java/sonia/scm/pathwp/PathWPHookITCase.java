@@ -97,6 +97,30 @@ public class PathWPHookITCase extends AbstractTestBase
    * Method description
    *
    *
+   * @throws IOException
+   * @throws RepositoryClientException
+   */
+  @Test
+  public void simpleAllowTest() throws RepositoryClientException, IOException
+  {
+    StringBuilder perms = new StringBuilder();
+
+    perms.append("[test.txt,").append(user.getName()).append("]");
+    setPathWPPermissions(perms.toString());
+
+    RepositoryClient client = createRepositoryClient();
+    File directory = client.getLocalRepository();
+    File file = new File(directory, "test.txt");
+
+    addContent(file);
+    client.add("test.txt");
+    client.commit("added test.txt");
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @throws FileNotFoundException
    * @throws IOException
    * @throws RepositoryClientException
