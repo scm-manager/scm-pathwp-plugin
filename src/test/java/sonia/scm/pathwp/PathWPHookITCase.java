@@ -42,6 +42,8 @@ import org.junit.runners.Parameterized;
 import sonia.scm.repository.client.RepositoryClient;
 import sonia.scm.repository.client.RepositoryClientException;
 
+import static org.junit.Assert.*;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -71,6 +73,58 @@ public class PathWPHookITCase extends AbstractTestBase
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @throws FileNotFoundException
+   * @throws IOException
+   * @throws RepositoryClientException
+   */
+  @Test
+  public void extendedTest()
+          throws RepositoryClientException, FileNotFoundException, IOException
+  {
+    StringBuilder perms = new StringBuilder();
+
+    perms.append("[bla/*,").append(user.getName()).append("]");
+    perms.append("[test.txt,").append(user.getName()).append("]");
+    setPathWPPermissions(perms.toString());
+
+    RepositoryClient client = createRepositoryClient();
+    File directory = client.getLocalRepository();
+    File file = new File(directory, "test.txt");
+
+    addContent(file);
+    System.out.println("******************* write test");
+    client.add("test.txt");
+    client.commit("added test.txt");
+
+    File nfile = new File(directory, "othertest.txt");
+
+    addContent(nfile);
+    System.out.println("******************* write othertest - 1");
+    client.add("othertest.txt");
+
+    boolean failed = false;
+
+    try
+    {
+      client.commit("added othertest.txt");
+    }
+    catch (RepositoryClientException ex)
+    {
+      failed = true;
+    }
+
+    assertTrue(failed);
+    perms = new StringBuilder();
+    perms.append("[othertest.txt,").append(user.getName()).append("]");
+    setPathWPPermissions(perms.toString());
+    System.out.println("******************* write othertest - 2");
+    client.commit("added othertest.txt");
+  }
 
   /**
    * Method description
