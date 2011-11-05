@@ -11,7 +11,7 @@
 
   <groupId>sonia.scm.plugins</groupId>
   <artifactId>scm-pathwp-plugin</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>scm-pathwp-plugin</name>
   <url>https://bitbucket.org/sdorra/scm-pathwp-plugin</url>
   <description>This plugin adds path write protection for repositories.</description>
