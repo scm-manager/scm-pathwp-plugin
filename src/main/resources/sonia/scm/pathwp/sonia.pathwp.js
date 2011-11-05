@@ -44,6 +44,10 @@ Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
   addIcon: 'resources/images/add.gif',
   removeIcon: 'resources/images/delete.gif',
   
+  enableHelpText: 'Enable Path write protection. \n\
+    Only admins, owners and users defined in the whitelist below are able to write.',
+  pathwpGridHelpText: 'Path write protection whitelist.',
+  
   pathwpStore: null,
   
   initComponent: function(){
@@ -97,7 +101,8 @@ Sonia.pathwp.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
         fieldLabel: this.enabledText,
         name: 'pathwpEnabled',
         inputValue: 'true',
-        property: 'pathwp.enabled'
+        property: 'pathwp.enabled',
+        helpText: this.enableHelpText
       },{
         id: 'pathwpGrid',
         xtype: 'editorgrid',
