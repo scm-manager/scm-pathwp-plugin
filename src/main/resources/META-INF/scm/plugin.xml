@@ -39,7 +39,7 @@
   </information>
 
   <conditions>
-    <min-version>1.8</min-version>
+    <min-version>${project.parent.version}</min-version>
   </conditions>
   
   <packages>
