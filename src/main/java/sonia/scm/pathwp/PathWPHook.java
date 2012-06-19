@@ -106,7 +106,7 @@ public class PathWPHook extends PreReceiveRepositoryHook
   public void onEvent(RepositoryHookEvent event)
   {
     if (!SecurityUtil.isAdmin(securityContextProvider)
-        || PermissionUtil.hasPermission(event.getRepository(),
+        &&!PermissionUtil.hasPermission(event.getRepository(),
           securityContextProvider, PermissionType.OWNER))
     {
       handleEvent(event);
