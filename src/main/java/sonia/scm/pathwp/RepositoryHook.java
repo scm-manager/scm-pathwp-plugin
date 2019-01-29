@@ -107,9 +107,7 @@ public class RepositoryHook {
         }
         return path;
       });
-    } catch (NotFoundException e) {
-      log.warn("cannot get modifications from the changeset " + changeset.getId(), e);
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.warn("cannot get modifications from the changeset " + changeset.getId(), e);
     }
     return paths;
