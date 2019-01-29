@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import sonia.scm.EagerSingleton;
-import sonia.scm.NotFoundException;
 import sonia.scm.group.GroupNames;
 import sonia.scm.pathwp.service.PathWritePermissionService;
 import sonia.scm.plugin.Extension;
@@ -20,7 +19,6 @@ import sonia.scm.repository.api.RepositoryServiceFactory;
 import sonia.scm.user.User;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.List;
 
 /**
