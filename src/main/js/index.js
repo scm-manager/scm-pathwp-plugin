@@ -1,6 +1,6 @@
 // @flow
 
-import {ConfigurationBinder as cfgBinder} from "@scm-manager/ui-components";
+import { ConfigurationBinder as cfgBinder } from "@scm-manager/ui-components";
 import PathWPsContainer from "./PathWPsContainer";
 
 cfgBinder.bindRepository(
