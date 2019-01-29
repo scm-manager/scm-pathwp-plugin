@@ -2,6 +2,7 @@
 /?target/
 release.properties
 nbactions.*\.xml
+/?nbproject/
 nb-configuration\.xml
 # MacOS X Files
 \.DS_Store$
@@ -23,3 +24,14 @@ Desktop DF$
 \.project
 \.classpath
 \.settings
+# idea files
+\.iml
+\.idea$
+# jrebel
+rebel.xml
+\.pyc
+# ui
+scm-ui/build
+scm-ui/coverage
+/?node_modules/
+

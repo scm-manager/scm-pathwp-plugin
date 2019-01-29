@@ -1,45 +1,24 @@
-<?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+
 
   <parent>
     <artifactId>scm-plugins</artifactId>
     <groupId>sonia.scm.plugins</groupId>
-    <version>1.8</version>
+    <version>2.0.0-SNAPSHOT</version>
   </parent>
+
 
   <groupId>sonia.scm.plugins</groupId>
   <artifactId>scm-pathwp-plugin</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <packaging>smp</packaging>
+  <version>2.0.0-SNAPSHOT</version>
   <name>scm-pathwp-plugin</name>
-  <url>https://bitbucket.org/sdorra/scm-pathwp-plugin</url>
   <description>This plugin adds path write protection for repositories.</description>
-  
-  <scm>
-    <connection>scm:hg:https://bitbucket.org/sdorra/scm-pathwp-plugin</connection>
-    <developerConnection>scm:hg:https://bitbucket.org/sdorra/scm-pathwp-plugin</developerConnection>
-    <url>https://bitbucket.org/sdorra/scm-pathwp-plugin</url>
-  </scm>
-  
-  <dependencies>
-    
-    <dependency>
-      <groupId>sonia.scm.clients</groupId>
-      <artifactId>scm-client-impl</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>test</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>sonia.scm</groupId>
-      <artifactId>scm-test</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>test</scope>
-    </dependency>
-    
-  </dependencies>
-  
+
+
   <repositories>
     
     <repository>
@@ -49,65 +28,38 @@
     </repository>
   
   </repositories>
-  
+
   <profiles>
     <profile>
-        
-      <id>it</id>
-  
+      <!-- If enabled, explicitly disables other profiles (i.e. link-ui). -->
+      <id>ci</id>
+    </profile>
+
+    <profile>
+      <id>link-ui</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
       <build>
         <plugins>
-          
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <version>2.9</version>
-            <executions>
-              <execution>
-                <id>integration-test</id>
-                <goals>
-                  <goal>integration-test</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>verify</id>
-                <goals>
-                  <goal>verify</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-      
+
           <plugin>
             <groupId>sonia.scm.maven</groupId>
-            <artifactId>scm-maven-plugin</artifactId>
-            <version>${project.parent.version}</version>
+            <artifactId>smp-maven-plugin</artifactId>
+            <version>1.0.0-alpha-3</version>
+            <extensions>true</extensions>
             <configuration>
-              <backgroud>true</backgroud>
-              <openBrowser>false</openBrowser>
+              <links>
+                <link>@scm-manager/ui-types</link>
+                <link>@scm-manager/ui-components</link>
+              </links>
             </configuration>
-            <executions>
-              <execution>
-                <id>start-scm-webapp</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>stop-scm-webapp</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>stop</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
-    
+
         </plugins>
       </build>
-  
-    </profile>  
-  </profiles>
 
+    </profile>
+  </profiles>
 </project>
