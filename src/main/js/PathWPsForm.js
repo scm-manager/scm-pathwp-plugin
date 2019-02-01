@@ -1,14 +1,17 @@
 //@flow
 import React from "react";
 import { translate } from "react-i18next";
-import type { PathWPs } from "./PathWP";
-import { Button, Checkbox } from "@scm-manager/ui-components";
-import PathWPComponent from "./PathWPComponent";
+import type { PathWPs, PathWP } from "./PathWP";
+import { Checkbox } from "@scm-manager/ui-components";
+import PathWPTable from "./PathWPTable";
+import AddPermissionFormComponent from "./AddPermissionFormComponent";
 
 type Props = {
   initialConfiguration: PathWPs,
   readOnly: boolean,
   onConfigurationChange: (PathWPs, boolean) => void,
+  userAutocompleteLink: string,
+  groupAutocompleteLink: string,
   // context prop
   t: string => string
 };
@@ -53,59 +56,41 @@ class PathWPsForm extends React.Component<Props, State> {
     this.updatePathWPs(permissions);
   };
 
-  onChangeEnabled = isEnabled => {
-    this.setState({ enabled: isEnabled }, () =>
-      this.props.onConfigurationChange(this.state, this.isValid())
+  userPathPermissionAdded = (permission: PathWP) => {
+    this.setState(
+      {
+        ...this.state,
+        permissions: [...this.state.permissions, permission]
+      },
+      () => {
+        this.props.onConfigurationChange(this.state, this.isValid());
+      }
     );
   };
 
-  render() {
-    const { permissions, enabled } = this.state;
-    const { t, readOnly } = this.props;
-    let defaultUserPathWP = {
-      path: "",
-      name: "",
-      group: false,
-      type: "ALLOW"
-    };
-    let defaultGroupPathWP = {
-      path: "",
-      name: "",
-      group: true,
-      type: "ALLOW"
-    };
+  onChangeEnabled = isEnabled => {
+    this.setState({ enabled: isEnabled }, () => {
+      this.props.onConfigurationChange(this.state, this.isValid());
+    });
+  };
 
-    const buttons = (
-      <article className="media">
-        <Button
-          disabled={readOnly}
-          label={t("scm-pathwp-plugin.add-user-permission")}
-          action={() => {
-            permissions.push(defaultUserPathWP);
-            this.updatePathWPs(permissions);
-          }}
-        />
-        <Button
-          disabled={readOnly}
-          label={t("scm-pathwp-plugin.add-group-permission")}
-          action={() => {
-            permissions.push(defaultGroupPathWP);
-            this.updatePathWPs(permissions);
-          }}
-        />
-      </article>
-    );
-
-    const form = permissions.map((pathWP, index) => {
+  renderAddUserFormComponent = () => {
+    const { readOnly } = this.props;
+    if (this.props.userAutocompleteLink) {
       return (
-        <PathWPComponent
-          pathWP={pathWP}
+        <AddPermissionFormComponent
+          userAutocompleteLink={this.props.userAutocompleteLink}
+          groupAutocompleteLink={this.props.groupAutocompleteLink}
+          onAdd={this.userPathPermissionAdded}
           readOnly={readOnly}
-          onDelete={this.onDelete}
-          onChange={changedPathWP => this.onChange(changedPathWP, index)}
         />
       );
-    });
+    } else return null;
+  };
+
+  render() {
+    const { enabled } = this.state;
+    const { t } = this.props;
 
     return (
       <>
@@ -115,8 +100,15 @@ class PathWPsForm extends React.Component<Props, State> {
           label={t("scm-pathwp-plugin.is-enabled")}
           helpText={t("scm-pathwp-plugin.is-enabled-help-text")}
         />
-        {enabled ? form : ""}
-        {enabled ? buttons : ""}
+        {enabled ? (
+          <>
+            <PathWPTable
+              permissions={this.state.permissions}
+              onDelete={this.onDelete}
+            />
+            {this.renderAddUserFormComponent()}
+          </>
+        ) : null}
       </>
     );
   }

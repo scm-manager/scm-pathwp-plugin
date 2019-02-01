@@ -1,0 +1,35 @@
+{
+  "scm-pathwp-plugin": {
+    "form": {
+      "header": "Bearbeitung von write- Berechtigungen für Paths",
+      "group": "Berechtigung für Gruppe",
+      "user": "Berechtigung für Benutzer",
+      "permission-help-text": "Auswahl der Path Write Berechtigung.",
+      "group-name": "Gruppe auswählen",
+      "user-name": "Benutzer auswählen",
+      "group-name-help-text": "Auswahl der Gruppe, die für den Path berechtigt werden soll.",
+      "user-name-help-text": "Auswahl des Benutzers, der für den Path berechtigt werden soll.",
+      "path": "Path",
+      "path-help-text": "Eingabe eines Pfadnamen oder eines Musters. Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden (z.B.: trunk/)",
+      "permission-help-message": "Auswahl der Berechtigung.",
+      "add": "Hinzufügen",
+      "group-permission": "Berechtigung für Gruppe",
+      "user-permission": "Berechtigung für Benutzer",
+      "permission": "Berechtigung",
+      "add-permission": "Berechtigung hinzufügen",
+      "permission-type": "Art der Berechtigung",
+      "permission-type-help-text": "Spezifizierung der Art der Berechtigung."
+    },
+    "confirm-delete": {
+      "title": "Löschen der Path-Berechtigung",
+      "message": "Soll die Path-Berechtigung wirklich gelöscht werden?",
+      "submit": "Ja (nicht das Speichern vergessen)",
+      "cancel": "Nein"
+    },
+    "nav-link": "Path Berechtigungen",
+    "add-user-permission": "Berechtigung für Benutzer hinzufügen ",
+    "add-group-permission": "Berechtigung für Gruppe hinzufügen ",
+    "is-enabled": "Path Write Berechtigungen aktivieren",
+    "is-enabled-help-text": "Wenn diese Option aktiv ist, können nur Administratoren, Owner des Repositories und die spezifizierten Regeln auf dem Repository schreiben."
+  }
+}
