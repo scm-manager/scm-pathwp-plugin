@@ -1,6 +1,5 @@
 package sonia.scm.pathwp.service;
 
-import com.google.common.base.Strings;
 import sonia.scm.group.GroupNames;
 import sonia.scm.repository.NamespaceAndName;
 import sonia.scm.repository.Repository;
@@ -54,7 +53,7 @@ public class PathWritePermissionService {
     }
 
     PathWritePermissions permissions = getPermissions(repository);
-    if (!permissions.isEnabled()) {
+    if (!isPluginEnabled(permissions)) {
       return true;
     }
 
@@ -64,6 +63,14 @@ public class PathWritePermissionService {
     BooleanSupplier anyUserGroupsDenied = () -> hasAnyGroupPermission(userGroups, path, permissions, PathWritePermission.Type.DENY);
 
     return !userDenied.getAsBoolean() && !anyUserGroupsDenied.getAsBoolean() && (userAllowed.getAsBoolean() || anyUserGroupsAllowed.getAsBoolean());
+  }
+  private boolean isPluginEnabled(PathWritePermissions permissions){
+    return permissions.isEnabled();
+  }
+
+  public boolean isPluginEnabled(Repository repository){
+    PathWritePermissions permissions = getPermissions(repository);
+    return isPluginEnabled(permissions);
   }
 
   public static boolean isPermitted(Repository repository) {

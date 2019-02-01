@@ -53,6 +53,11 @@ public class RepositoryHook {
       return;
     }
 
+    if (!service.isPluginEnabled(repository)){
+      log.trace("The PathWP Plugin is disabled.");
+      return ;
+    }
+
     log.trace("received hook for repository {}", repository.getName());
     List<String> paths = getPaths(context, repository);
     for (String path : paths) {
