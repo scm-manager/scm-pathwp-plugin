@@ -1,10 +1,10 @@
 package sonia.scm.pathwp;
 
 import sonia.scm.api.v2.resources.Enrich;
-import sonia.scm.api.v2.resources.LinkAppender;
+import sonia.scm.api.v2.resources.HalAppender;
+import sonia.scm.api.v2.resources.HalEnricher;
+import sonia.scm.api.v2.resources.HalEnricherContext;
 import sonia.scm.api.v2.resources.LinkBuilder;
-import sonia.scm.api.v2.resources.LinkEnricher;
-import sonia.scm.api.v2.resources.LinkEnricherContext;
 import sonia.scm.api.v2.resources.ScmPathInfoStore;
 import sonia.scm.pathwp.api.PathWritePermissionResource;
 import sonia.scm.pathwp.service.PathWritePermissionService;
@@ -16,7 +16,7 @@ import javax.inject.Provider;
 
 @Extension
 @Enrich(Repository.class)
-public class RepositoryLinkEnricher implements LinkEnricher {
+public class RepositoryLinkEnricher implements HalEnricher {
 
   private final Provider<ScmPathInfoStore> scmPathInfoStoreProvider;
 
@@ -25,12 +25,13 @@ public class RepositoryLinkEnricher implements LinkEnricher {
     this.scmPathInfoStoreProvider = scmPathInfoStoreProvider;
   }
 
+
   @Override
-  public void enrich(LinkEnricherContext context, LinkAppender appender) {
-      Repository repository = context.oneRequireByType(Repository.class);
+  public void enrich(HalEnricherContext context, HalAppender appender) {
+    Repository repository = context.oneRequireByType(Repository.class);
     if (PathWritePermissionService.isPermitted(repository)) {
       LinkBuilder linkBuilder = new LinkBuilder(scmPathInfoStoreProvider.get().get(), PathWritePermissionResource.class);
-      appender.appendOne("pathWpConfig", linkBuilder.method("get").parameters(repository.getNamespace(), repository.getName()).href());
+      appender.appendLink("pathWpConfig", linkBuilder.method("get").parameters(repository.getNamespace(), repository.getName()).href());
     }
   }
 }
