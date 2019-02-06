@@ -119,7 +119,7 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
     const { path } = pathProtectionPermission;
     return (
       <>
-        <h1 class="subtitle">{t("scm-pathwp-plugin.form.add-permission")}</h1>
+        <h1 className="subtitle">{t("scm-pathwp-plugin.form.add-permission")}</h1>
         <div className="control">
           <LabelWithHelpIcon
             label={t("scm-pathwp-plugin.form.permission-type")}
@@ -155,10 +155,10 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
           onChange={this.handlePathExpressionChange}
           disabled={readOnly}
         />
-        <div class="columns">
-          <div class="column is-two-thirds">{this.renderAutocomplete()}</div>
+        <div className="columns">
+          <div className="column is-two-thirds">{this.renderAutocomplete()}</div>
 
-          <div class="column is-one-third">
+          <div className="column is-one-third">
             <LabelWithHelpIcon
               label={t("scm-pathwp-plugin.form.permission")}
               helpText={t("scm-pathwp-plugin.form.permission-help-text")}
