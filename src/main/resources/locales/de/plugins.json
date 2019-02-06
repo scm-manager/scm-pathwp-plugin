@@ -1,16 +1,16 @@
 {
   "scm-pathwp-plugin": {
     "form": {
-      "header": "Bearbeitung von write- Berechtigungen für Paths",
+      "header": "Bearbeitung von write- Berechtigungen für Pfade",
       "group": "Berechtigung für Gruppe",
       "user": "Berechtigung für Benutzer",
-      "permission-help-text": "Auswahl der Path Write Berechtigung.",
+      "permission-help-text": "Auswahl der Path Schreibrechte Berechtigung.",
       "group-name": "Gruppe auswählen",
       "user-name": "Benutzer auswählen",
       "group-name-help-text": "Auswahl der Gruppe, die für den Path berechtigt werden soll.",
       "user-name-help-text": "Auswahl des Benutzers, der für den Path berechtigt werden soll.",
       "path": "Path",
-      "path-help-text": "Eingabe eines Pfadnamen oder eines Musters. Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden (z.B.: trunk/)",
+      "path-help-text": "Eingabe eines Pfadnamen oder eines Musters. Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden (z.B.: trunk/*)",
       "permission-help-message": "Auswahl der Berechtigung.",
       "add": "Hinzufügen",
       "group-permission": "Berechtigung für Gruppe",
