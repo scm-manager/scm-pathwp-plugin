@@ -48,9 +48,6 @@ public class PathWritePermissionService {
    */
   public boolean isPrivileged(User user, GroupNames userGroups, Repository repository, String path) {
     AssertUtil.assertIsNotNull(user);
-    if (isPermitted(repository)) {
-      return true;
-    }
 
     PathWritePermissions permissions = getPermissions(repository);
     if (!isPluginEnabled(permissions)) {

@@ -15,6 +15,7 @@ import sonia.scm.pathwp.service.PathWritePermissions;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,8 +62,9 @@ public class PathWritePermissionResourceTest {
   }
 
   @Test
-  public void shouldGetPathWritePermissions() throws URISyntaxException {
+  public void shouldGetPathWritePermissions() throws URISyntaxException, UnsupportedEncodingException {
     PathWritePermissions permissions = new PathWritePermissions();
+    permissions.setEnabled(true);
     permissions.getPermissions().add(new PathWritePermission(PATH, "user_1", false, PathWritePermission.Type.ALLOW));
     when(service.getPermissions("space", "repo")).thenReturn(permissions);
 
@@ -90,6 +92,7 @@ public class PathWritePermissionResourceTest {
       .isEqualTo(HttpServletResponse.SC_NO_CONTENT);
     verify(service).setPermissions(eq("space"), eq("repo"), argThat(pathWritePermissions -> {
       PathWritePermissions permissions = new PathWritePermissions();
+      permissions.setEnabled(true);
       permissions.getPermissions().add(new PathWritePermission(PATH, "user_1", false, PathWritePermission.Type.ALLOW));
       assertThat(pathWritePermissions).isEqualToComparingFieldByFieldRecursively(permissions);
       return true;

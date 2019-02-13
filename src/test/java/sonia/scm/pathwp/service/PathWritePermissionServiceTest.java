@@ -93,24 +93,16 @@ public class PathWritePermissionServiceTest {
 
   @Test
   @SubjectAware(username = "owner", password = "secret")
-  public void shouldAllowRepositoryOwnerWithoutReadingPermissions() {
-    User admin = new User("owner");
-    admin.setAdmin(false);
-    boolean privileged = service.isPrivileged(admin, new GroupNames(GROUP_NAME), REPOSITORY, PATH);
-
+  public void shouldBePermittedAsOwner() {
+    boolean privileged = PathWritePermissionService.isPermitted(REPOSITORY);
     assertThat(privileged).isTrue();
-    verify(store, never()).get();
   }
 
   @Test
   @SubjectAware(username = "admin", password = "secret")
-  public void shouldAllowAdminWithoutReadingPermissions() {
-    User admin = new User("admin");
-    admin.setAdmin(true);
-    boolean privileged = service.isPrivileged(admin, new GroupNames(GROUP_NAME), REPOSITORY, PATH);
-
+  public void shouldBePermittedAsAdmin() {
+    boolean privileged = PathWritePermissionService.isPermitted(REPOSITORY);
     assertThat(privileged).isTrue();
-    verify(store, never()).get();
   }
 
   @Test
@@ -174,6 +166,7 @@ public class PathWritePermissionServiceTest {
   @Test
   public void shouldDenyPermissionBecauseAllPathsAreAllowedToTheUserButTheSearchedPathIsDenied() {
     PathWritePermissions permissions = new PathWritePermissions();
+    permissions.setEnabled(true);
     PathWritePermission pathWritePermission = new PathWritePermission("*", USER.getName(), false, PathWritePermission.Type.ALLOW);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, USER.getName(), false, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(pathWritePermission);
@@ -188,6 +181,7 @@ public class PathWritePermissionServiceTest {
   @Test
   public void shouldDenyPermissionBecauseAllPathsAreAllowedToOneOfTheUserGroupsButTheSearchedPathIsDenied() {
     PathWritePermissions permissions = new PathWritePermissions();
+    permissions.setEnabled(true);
     PathWritePermission pathWritePermission = new PathWritePermission("*", GROUP_NAME, true, PathWritePermission.Type.ALLOW);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, USER.getName(), false, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(pathWritePermission);
@@ -202,6 +196,7 @@ public class PathWritePermissionServiceTest {
   @Test
   public void shouldDenyPermissionBecauseTheSearchedPathIsDenied() {
     PathWritePermissions permissions = new PathWritePermissions();
+    permissions.setEnabled(true);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, USER.getName(), false, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(deniedPermission);
     when(store.get()).thenReturn(permissions);
@@ -214,6 +209,7 @@ public class PathWritePermissionServiceTest {
   @Test
   public void shouldDenyPermissionBecauseTheSearchedPathIsDeniedToOneOfTheUserGroups() {
     PathWritePermissions permissions = new PathWritePermissions();
+    permissions.setEnabled(true);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, GROUP_NAME, true, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(deniedPermission);
     when(store.get()).thenReturn(permissions);
@@ -226,6 +222,7 @@ public class PathWritePermissionServiceTest {
   @Test
   public void shouldDenyPermissionBecauseThereIsNoStoredPermissionForTheSearchedPath() {
     PathWritePermissions permissions = new PathWritePermissions();
+    permissions.setEnabled(true);
     PathWritePermission deniedPermission = new PathWritePermission("other_path", USER.getName(), false, PathWritePermission.Type.ALLOW);
     permissions.getPermissions().add(deniedPermission);
     when(store.get()).thenReturn(permissions);
