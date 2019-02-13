@@ -19,7 +19,8 @@ import java.util.List;
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class PathWritePermissions {
 
-  private boolean isEnabled = true;
+  private boolean isEnabled = false;
+
   @XmlElement(name = "permission")
   private List<PathWritePermission> permissions = new ArrayList<>();
 
