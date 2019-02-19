@@ -1,0 +1,5 @@
+<repository-permissions>
+  <verbs>
+    <verb>pathwp</verb>
+  </verbs>
+</repository-permissions>

@@ -21,6 +21,7 @@ import java.util.function.BooleanSupplier;
  */
 public class PathWritePermissionService {
 
+  public static final String PERMISSION_VERB = "pathwp";
   private ConfigurationStoreFactory storeFactory;
   private RepositoryManager repositoryManager;
   private static final String STORE_NAME = "pathWritePermission";
@@ -70,11 +71,11 @@ public class PathWritePermissionService {
   }
 
   public static boolean isPermitted(Repository repository) {
-    return RepositoryPermissions.modify(repository).isPermitted();
+    return RepositoryPermissions.custom(PERMISSION_VERB, repository).isPermitted();
   }
 
   public void checkPermission(Repository repository) {
-    RepositoryPermissions.modify(repository).check();
+    RepositoryPermissions.custom(PERMISSION_VERB, repository).check();
   }
 
   private boolean hasAnyGroupPermission(GroupNames userGroups, String path, PathWritePermissions permissions, PathWritePermission.Type type) {
