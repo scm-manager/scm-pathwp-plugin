@@ -1,6 +1,6 @@
 // @flow
 import React from "react";
-import { Configuration, Title } from "@scm-manager/ui-components";
+import { Configuration, Subtitle } from "@scm-manager/ui-components";
 import { translate } from "react-i18next";
 import type { Repository } from "@scm-manager/ui-types";
 import PathWPsForm from "./PathWPsForm";
@@ -27,7 +27,7 @@ class PathWPsContainer extends React.Component<Props> {
     ).href;
     return (
       <>
-        <Title title={t("scm-pathwp-plugin.form.header")} />
+        <Subtitle subtitle={t("scm-pathwp-plugin.form.header")} />
         <br />
         <Configuration
           link={link}
