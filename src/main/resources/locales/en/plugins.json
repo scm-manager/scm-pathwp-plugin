@@ -31,5 +31,23 @@
     "add-group-permission": "Add Group Permission ",
     "is-enabled": "Enable Path Write Permissions",
     "is-enabled-help-text": "If enabled, nobody can write to the repository expect administrators, repository owners and the specified rules."
+  },
+  "permissions": {
+    "repository": {
+      "pathwp": {
+        "*": {
+          "displayName": "Modify repository specific path permissions",
+          "description": "May modify repository specific path permissions"
+        }
+      }
+    }
+  },
+  "verbs": {
+    "repository": {
+      "pathwp": {
+        "displayName": "modify path permissions",
+        "description": "May modify path permissions"
+      }
+    }
   }
 }

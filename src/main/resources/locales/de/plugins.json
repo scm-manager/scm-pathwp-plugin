@@ -31,5 +31,23 @@
     "add-group-permission": "Berechtigung für Gruppe hinzufügen ",
     "is-enabled": "Pfad Schreibrechte Berechtigungen aktivieren",
     "is-enabled-help-text": "Wenn diese Option aktiv ist, können nur Administratoren, Owner des Repositories und die spezifizierten Regeln auf dem Repository schreiben."
+  },
+  "permissions": {
+    "repository": {
+      "pathwp": {
+        "*": {
+          "displayName": "Repository-spezifische Schreibrechte für Pfade ändern",
+          "description": "Darf die repository-spezifischen Schreibrechte für Pfade verändern"
+        }
+      }
+    }
+  },
+  "verbs": {
+    "repository": {
+      "pathwp": {
+        "displayName": "Schreibrechte für Pfade ändern",
+        "description": "Darf die Schreibrechte für Pfade verändern"
+      }
+    }
   }
 }
