@@ -1,10 +1,10 @@
 {
   "scm-pathwp-plugin": {
     "form": {
-      "header": "Edit write permission for paths",
+      "header": "Write permissions for paths",
       "group": "Group Permission",
       "user": "User Permission",
-      "permission-help-text": "select the path write permission",
+      "permission-help-text": "Select the path write permission",
       "group-name": "Select Group",
       "user-name": "Select User",
       "group-name-help-text": "Select the group to be privileged for the path",
@@ -30,7 +30,7 @@
     "add-user-permission": "Add User Permission ",
     "add-group-permission": "Add Group Permission ",
     "is-enabled": "Enable Path Write Permissions",
-    "is-enabled-help-text": "If enabled, nobody can write to the repository expect administrators, repository owners and the specified rules."
+    "is-enabled-help-text": "If enabled, nobody can write to the repository except administrators, repository owners and the specified rules."
   },
   "permissions": {
     "repository": {
