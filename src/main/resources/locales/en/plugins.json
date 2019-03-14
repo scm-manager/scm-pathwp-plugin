@@ -1,5 +1,12 @@
 {
   "scm-pathwp-plugin": {
+    "table" :{
+      "path" : "Path",
+      "name" : "Name",
+      "type" : "Type",
+      "group" : "Group",
+      "delete" : "Delete"
+    },
     "form": {
       "header": "Write permissions for paths",
       "group": "Group Permission",

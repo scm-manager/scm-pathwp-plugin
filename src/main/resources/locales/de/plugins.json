@@ -1,5 +1,12 @@
 {
   "scm-pathwp-plugin": {
+    "table" :{
+      "path" : "Pfad",
+      "name" : "Name",
+      "type" : "Typ",
+      "group" : "Gruppe",
+      "delete" : "Löschen"
+    },
     "form": {
       "header": "Schreib-Berechtigungen für Pfade",
       "group": "Berechtigung für Gruppe",
