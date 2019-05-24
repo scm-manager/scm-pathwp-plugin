@@ -32,7 +32,7 @@ class PathWPTable extends React.Component<Props> {
       });
 
       return (
-        <table className="has-background-light table is-hoverable is-fullwidth">
+        <table className="card-table table is-hoverable is-fullwidth">
           <thead>
             <tr>
               <th>
