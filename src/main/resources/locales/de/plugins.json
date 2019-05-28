@@ -1,43 +1,40 @@
 {
   "scm-pathwp-plugin": {
-    "table" :{
-      "path" : "Pfad",
-      "name" : "Name",
-      "type" : "Typ",
+    "navLink": "Pfad-Berechtigungen",
+    "enable": "Schreib-Berechtigungen für Pfade aktivieren",
+    "enableHelpText": "Wenn diese Option aktiv ist, können nur Administratoren, Owner des Repositories und die spezifizierten Regeln auf dem Repository schreiben.",
+    "editSubtitle": "Schreib-Berechtigungen für Pfade",
+    "addSubtitle": "Berechtigung hinzufügen",
+    "noPermissions": "Keine Pfad-Berechtigungen gefunden",
+    "form": {
+      "permissionType": "Art der Berechtigung",
+      "userPermission": "Benutzer berechtigen",
+      "groupPermission": "Gruppe berechtigen",
+      "path": "Pfad",
+      "pathHelpText": "Eingabe eines Pfadnamen oder eines Musters. Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden (z.B.: trunk/*).",
+      "groupLabel": "Gruppe auswählen",
+      "userLabel": "Benutzer auswählen",
+      "groupHelpText": "Auswahl der Gruppe, die für den Pfad berechtigt werden soll.",
+      "userHelpText": "Auswahl des Benutzers, der für den Pfad berechtigt werden soll.",
+      "permission": "Berechtigung",
+      "permissionHelpText": "Auswahl der Berechtigung.",
+      "add": "Hinzufügen"
+    },
+    "table": {
+      "name": "Benutzer oder Gruppe",
+      "nameHelpText": "Verwaltung von Berechtigungen für Benutzer und Gruppen",
+      "path": "Pfad",
+      "permission": "Berechtigung",
       "group" : "Gruppe",
+      "user": "Benutzer",
       "delete" : "Löschen"
     },
-    "form": {
-      "header": "Schreib-Berechtigungen für Pfade",
-      "group": "Berechtigung für Gruppe",
-      "user": "Berechtigung für Benutzer",
-      "permission-help-text": "Auswahl der Pfad Schreibrechte Berechtigung.",
-      "group-name": "Gruppe auswählen",
-      "user-name": "Benutzer auswählen",
-      "group-name-help-text": "Auswahl der Gruppe, die für den Pfad berechtigt werden soll.",
-      "user-name-help-text": "Auswahl des Benutzers, der für den Pfad berechtigt werden soll.",
-      "path": "Pfad",
-      "path-help-text": "Eingabe eines Pfadnamen oder eines Musters. Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden (z.B.: trunk/*)",
-      "permission-help-message": "Auswahl der Berechtigung.",
-      "add": "Hinzufügen",
-      "group-permission": "Gruppe berechtigen",
-      "user-permission": "Benutzer berechtigen",
-      "permission": "Berechtigung",
-      "add-permission": "Berechtigung hinzufügen",
-      "permission-type": "Art der Berechtigung",
-      "permission-type-help-text": "Festlegung der Art der Berechtigung."
-    },
-    "confirm-delete": {
+    "confirmDeleteAlert": {
       "title": "Löschen der Pfad-Berechtigung",
       "message": "Soll die Pfad-Berechtigung wirklich gelöscht werden?",
       "submit": "Ja (Speichern nicht vergessen)",
       "cancel": "Nein"
-    },
-    "nav-link": "Pfad Berechtigungen",
-    "add-user-permission": "Berechtigung für Benutzer hinzufügen ",
-    "add-group-permission": "Berechtigung für Gruppe hinzufügen ",
-    "is-enabled": "Schreib-Berechtigungen für Pfade aktivieren",
-    "is-enabled-help-text": "Wenn diese Option aktiv ist, können nur Administratoren, Owner des Repositories und die spezifizierten Regeln auf dem Repository schreiben."
+    }
   },
   "permissions": {
     "repository": {

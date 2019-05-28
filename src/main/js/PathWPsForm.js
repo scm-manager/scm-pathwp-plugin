@@ -1,9 +1,9 @@
 //@flow
 import React from "react";
 import { translate } from "react-i18next";
-import type { PathWPs, PathWP } from "./PathWP";
-import { Checkbox } from "@scm-manager/ui-components";
-import PathWPTable from "./PathWPTable";
+import type { PathWPs, PathWP } from "./types/PathWP";
+import { Checkbox, Subtitle } from "@scm-manager/ui-components";
+import PathWPTable from "./table/PathWPTable";
 import AddPermissionFormComponent from "./AddPermissionFormComponent";
 
 type Props = {
@@ -12,6 +12,7 @@ type Props = {
   onConfigurationChange: (PathWPs, boolean) => void,
   userAutocompleteLink: string,
   groupAutocompleteLink: string,
+
   // context prop
   t: string => string
 };
@@ -97,11 +98,13 @@ class PathWPsForm extends React.Component<Props, State> {
         <Checkbox
           checked={enabled}
           onChange={this.onChangeEnabled}
-          label={t("scm-pathwp-plugin.is-enabled")}
-          helpText={t("scm-pathwp-plugin.is-enabled-help-text")}
+          label={t("scm-pathwp-plugin.enable")}
+          helpText={t("scm-pathwp-plugin.enableHelpText")}
         />
         {enabled ? (
           <>
+            <hr />
+            <Subtitle subtitle={t("scm-pathwp-plugin.editSubtitle")} />
             <PathWPTable
               permissions={this.state.permissions}
               onDelete={this.onDelete}

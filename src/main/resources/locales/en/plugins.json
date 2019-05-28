@@ -1,43 +1,40 @@
 {
   "scm-pathwp-plugin": {
-    "table" :{
-      "path" : "Path",
-      "name" : "Name",
-      "type" : "Type",
-      "group" : "Group",
+    "navLink": "Path Permissions",
+    "enable": "Enable Path Write Permissions",
+    "enableHelpText": "If enabled, nobody can write to the repository except administrators, repository owners and the specified rules.",
+    "editSubtitle": "Write permissions for paths",
+    "addSubtitle": "Add permission",
+    "noPermissions": "No path permissions found.",
+    "form": {
+      "permissionType": "Permission type",
+      "userPermission": "User permission",
+      "groupPermission": "Group permission",
+      "path": "Path",
+      "pathHelpText": "Enter an exact path or a pattern. To protect a complete folder use a star at the end of the path (e.g.: trunk/*).",
+      "groupLabel": "Select Group",
+      "userLabel": "Select User",
+      "groupHelpText": "Select the group to be privileged for the path",
+      "userHelpText": "Select the user to be privileged for the path",
+      "permission": "Permission",
+      "permissionHelpText": "Select the path write permission",
+      "add": "Add"
+    },
+    "table": {
+      "name": "User or group",
+      "nameHelpText": "Manage permissions for a specific user or group.",
+      "path": "Path",
+      "permission": "Permission",
+      "group": "Group",
+      "user": "User",
       "delete" : "Delete"
     },
-    "form": {
-      "header": "Write permissions for paths",
-      "group": "Group Permission",
-      "user": "User Permission",
-      "permission-help-text": "Select the path write permission",
-      "group-name": "Select Group",
-      "user-name": "Select User",
-      "group-name-help-text": "Select the group to be privileged for the path",
-      "user-name-help-text": "Select the user to be privileged for the path",
-      "path": "Path",
-      "path-help-text": "Enter an exact path or a pattern. To protect a complete folder use a star at the end of the path (e.g.: trunk/*) ",
-      "permission-help-message": "Select Permission",
-      "add": "Add",
-      "group-permission": "Group permission",
-      "user-permission": "User permission",
-      "permission": "Permission",
-      "add-permission": "Add permission",
-      "permission-type": "Permission type",
-      "permission-type-help-text": "Specify the permission type"
-    },
-    "confirm-delete": {
+    "confirmDeleteAlert": {
       "title": "Delete Path Permission",
       "message": "Do you really want to delete the Path Permission?",
       "submit": "Yes (do not forget to submit)",
       "cancel": "No"
-    },
-    "nav-link": "Path Permissions",
-    "add-user-permission": "Add User Permission ",
-    "add-group-permission": "Add Group Permission ",
-    "is-enabled": "Enable Path Write Permissions",
-    "is-enabled-help-text": "If enabled, nobody can write to the repository except administrators, repository owners and the specified rules."
+    }
   },
   "permissions": {
     "repository": {

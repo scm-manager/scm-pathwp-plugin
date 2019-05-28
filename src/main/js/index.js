@@ -5,7 +5,7 @@ import PathWPsContainer from "./PathWPsContainer";
 
 cfgBinder.bindRepositorySetting(
   "/pathwp",
-  "scm-pathwp-plugin.nav-link",
+  "scm-pathwp-plugin.navLink",
   "pathWpConfig",
   PathWPsContainer
 );
