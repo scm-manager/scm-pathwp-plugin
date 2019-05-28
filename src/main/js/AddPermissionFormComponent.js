@@ -164,7 +164,7 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
           </div>
           <div className="column is-two-fifths">
             <div className="columns">
-              <div className="column is-narrow">
+              <div className="column is-one-third">
                 <LabelWithHelpIcon
                   label={t("scm-pathwp-plugin.form.permission")}
                   helpText={t("scm-pathwp-plugin.form.permissionHelpText")}
