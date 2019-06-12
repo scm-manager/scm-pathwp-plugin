@@ -12,10 +12,6 @@
       "groupPermission": "Group permission",
       "path": "Path",
       "pathHelpText": "Enter an exact path or a pattern. To protect a complete folder use a star at the end of the path (e.g.: trunk/*).",
-      "groupLabel": "Select Group",
-      "userLabel": "Select User",
-      "groupHelpText": "Select the group to be privileged for the path",
-      "userHelpText": "Select the user to be privileged for the path",
       "permission": "Permission",
       "permissionHelpText": "Select the path write permission",
       "add": "Add"

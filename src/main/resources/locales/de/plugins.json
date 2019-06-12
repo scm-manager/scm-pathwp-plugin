@@ -12,10 +12,6 @@
       "groupPermission": "Gruppe berechtigen",
       "path": "Pfad",
       "pathHelpText": "Eingabe eines Pfadnamen oder eines Musters. Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden (z.B.: trunk/*).",
-      "groupLabel": "Gruppe auswählen",
-      "userLabel": "Benutzer auswählen",
-      "groupHelpText": "Auswahl der Gruppe, die für den Pfad berechtigt werden soll.",
-      "userHelpText": "Auswahl des Benutzers, der für den Pfad berechtigt werden soll.",
       "permission": "Berechtigung",
       "permissionHelpText": "Auswahl der Berechtigung.",
       "add": "Hinzufügen"
