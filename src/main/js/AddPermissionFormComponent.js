@@ -8,11 +8,11 @@ import {
   Radio,
   DropDown,
   Subtitle,
-  LabelWithHelpIcon
+  LabelWithHelpIcon,
+  GroupAutocomplete,
+  UserAutocomplete
 } from "@scm-manager/ui-components";
 import type { PathWP } from "./types/PathWP";
-import GroupAutocomplete from "./GroupAutocomplete";
-import UserAutocomplete from "./UserAutocomplete";
 
 type Props = {
   userAutocompleteLink: string,
