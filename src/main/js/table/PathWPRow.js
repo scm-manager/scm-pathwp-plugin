@@ -4,6 +4,7 @@ import { translate } from "react-i18next";
 import injectSheet from "react-jss";
 import { confirmAlert, Icon } from "@scm-manager/ui-components";
 import type { PathWP } from "../types/PathWP";
+import classNames from "classnames";
 
 type Props = {
   permission: PathWP,
@@ -57,7 +58,7 @@ class PathWPRow extends React.Component<Props> {
         </td>
         <td>{permission.path}</td>
         <td>{permission.type}</td>
-        <td>
+        <td className={classNames("is-darker", classes.centerMiddle)}>
           <a
             className="level-item"
             onClick={this.confirmDelete}
