@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import sonia.scm.group.GroupNames;
 import sonia.scm.repository.Repository;
@@ -19,11 +18,6 @@ import sonia.scm.user.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @SubjectAware(configuration = "classpath:sonia/scm/pathwp/shiro-001.ini", username = "user_1", password = "secret")
@@ -40,11 +34,8 @@ public class PathWritePermissionServiceTest {
   @Rule
   public ShiroRule shiro = new ShiroRule();
 
-  @Mock
   ConfigurationStore<PathWritePermissions> store;
-
   ConfigurationStoreFactory storeFactory;
-
 
   PathWritePermissionService service;
   public static final Repository REPOSITORY = RepositoryTestData.createHeartOfGold();
@@ -53,6 +44,7 @@ public class PathWritePermissionServiceTest {
   public void init() {
     storeFactory = new InMemoryConfigurationStoreFactory();
     service = new PathWritePermissionService(storeFactory, null);
+    store = storeFactory.withType(PathWritePermissions.class).withName("pathWritePermission").forRepository(REPOSITORY).build();
   }
 
   public PathWritePermissionServiceTest() {
@@ -71,12 +63,7 @@ public class PathWritePermissionServiceTest {
     permissions.getPermissions().add(permission);
     service.setPermissions(REPOSITORY, permissions);
 
-    verify(store).set(argThat(argPermissions -> {
-      assertThat(argPermissions.getPermissions()).hasSize(1);
-      assertThat(argPermissions.getPermissions().get(0))
-        .isEqualToComparingFieldByField(createPathWritePermission());
-      return true;
-    }));
+    assertThat(store.get()).isSameAs(permissions);
   }
 
   @Test
@@ -87,8 +74,6 @@ public class PathWritePermissionServiceTest {
     permissions.getPermissions().add(permission);
 
     assertThatThrownBy(() -> service.setPermissions(REPOSITORY, permissions)).hasMessage("Subject does not have permission [repository:pathwp:id-1]");
-
-    verify(store, never()).set(any());
   }
 
   @Test
@@ -109,18 +94,15 @@ public class PathWritePermissionServiceTest {
   public void shouldAllowAnyUserIfTheConfigIsDisabled() {
     PathWritePermissions permissions = new PathWritePermissions();
     permissions.setEnabled(false);
-    when(store.get()).thenReturn(permissions);
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME), REPOSITORY, PATH);
 
     assertThat(privileged).isTrue();
-    verify(store).get();
   }
 
   @Test
   public void shouldPrivilegeUserBecauseThePathIsAllowedToTheUser() {
     PathWritePermissions permissions = new PathWritePermissions();
     permissions.getPermissions().add(createPathWritePermission());
-    when(store.get()).thenReturn(permissions);
 
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME), REPOSITORY, PATH);
 
@@ -132,7 +114,6 @@ public class PathWritePermissionServiceTest {
     PathWritePermissions permissions = new PathWritePermissions();
     PathWritePermission pathWritePermission = new PathWritePermission("*", USER.getName(), false, PathWritePermission.Type.ALLOW);
     permissions.getPermissions().add(pathWritePermission);
-    when(store.get()).thenReturn(permissions);
 
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME), REPOSITORY, PATH);
 
@@ -144,7 +125,6 @@ public class PathWritePermissionServiceTest {
     PathWritePermissions permissions = new PathWritePermissions();
     PathWritePermission pathWritePermission = new PathWritePermission("*", GROUP_NAME, true, PathWritePermission.Type.ALLOW);
     permissions.getPermissions().add(pathWritePermission);
-    when(store.get()).thenReturn(permissions);
 
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME, "group2", "group3"), REPOSITORY, PATH);
 
@@ -156,7 +136,6 @@ public class PathWritePermissionServiceTest {
     PathWritePermissions permissions = new PathWritePermissions();
     PathWritePermission pathWritePermission = new PathWritePermission(PATH, GROUP_NAME, true, PathWritePermission.Type.ALLOW);
     permissions.getPermissions().add(pathWritePermission);
-    when(store.get()).thenReturn(permissions);
 
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME, "group2", "group3"), REPOSITORY, PATH);
 
@@ -171,7 +150,7 @@ public class PathWritePermissionServiceTest {
     PathWritePermission deniedPermission = new PathWritePermission(PATH, USER.getName(), false, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(pathWritePermission);
     permissions.getPermissions().add(deniedPermission);
-    when(store.get()).thenReturn(permissions);
+    store.set(permissions);
 
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME), REPOSITORY, PATH);
 
@@ -186,7 +165,7 @@ public class PathWritePermissionServiceTest {
     PathWritePermission deniedPermission = new PathWritePermission(PATH, USER.getName(), false, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(pathWritePermission);
     permissions.getPermissions().add(deniedPermission);
-    when(store.get()).thenReturn(permissions);
+    store.set(permissions);
 
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME, "group2", "group3"), REPOSITORY, PATH);
 
@@ -199,7 +178,7 @@ public class PathWritePermissionServiceTest {
     permissions.setEnabled(true);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, USER.getName(), false, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(deniedPermission);
-    when(store.get()).thenReturn(permissions);
+    store.set(permissions);
 
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME), REPOSITORY, PATH);
 
@@ -212,7 +191,7 @@ public class PathWritePermissionServiceTest {
     permissions.setEnabled(true);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, GROUP_NAME, true, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(deniedPermission);
-    when(store.get()).thenReturn(permissions);
+    store.set(permissions);
 
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME, "group2", "group3"), REPOSITORY, PATH);
 
@@ -225,7 +204,7 @@ public class PathWritePermissionServiceTest {
     permissions.setEnabled(true);
     PathWritePermission deniedPermission = new PathWritePermission("other_path", USER.getName(), false, PathWritePermission.Type.ALLOW);
     permissions.getPermissions().add(deniedPermission);
-    when(store.get()).thenReturn(permissions);
+    store.set(permissions);
 
     boolean privileged = service.isPrivileged(USER, new GroupNames(GROUP_NAME), REPOSITORY, PATH);
 
