@@ -44,7 +44,7 @@ public class PathWritePermissionServiceTest {
   public void init() {
     storeFactory = new InMemoryConfigurationStoreFactory();
     service = new PathWritePermissionService(storeFactory, null);
-    store = storeFactory.withType(PathWritePermissions.class).withName("pathWritePermission").build();
+    store = storeFactory.withType(PathWritePermissions.class).withName("pathWritePermission").forRepository(REPOSITORY).build();
   }
 
   public PathWritePermissionServiceTest() {
