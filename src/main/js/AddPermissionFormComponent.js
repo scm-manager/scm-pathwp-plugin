@@ -26,7 +26,7 @@ type Props = {
 
 type State = {
   pathProtectionPermission: PathWP,
-  selectedValue: SelectValue
+  selectedValue?: SelectValue
 };
 
 const defaultState = {
@@ -36,10 +36,7 @@ const defaultState = {
     path: "",
     group: false
   },
-  selectedValue: {
-    label: "",
-    value: { id: "", displayName: "" }
-  }
+  selectedValue: undefined
 };
 
 class AddPermissionFormComponent extends React.Component<Props, State> {
@@ -87,7 +84,7 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
         ...this.state.pathProtectionPermission,
         group
       },
-      selectedValue: null
+      selectedValue: undefined
     });
   };
 
@@ -134,12 +131,10 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
               disabled={readOnly}
             />
           </div>
-          <div className="column is-three-fifths">
-            {this.renderAutocomplete()}
-          </div>
-          <div className="column is-two-fifths">
+          <div className="column">{this.renderAutocomplete()}</div>
+          <div className="column">
             <div className="columns">
-              <div className="column is-one-third">
+              <div className="column">
                 <LabelWithHelpIcon
                   label={t("scm-pathwp-plugin.form.permission")}
                   helpText={t("scm-pathwp-plugin.form.permissionHelpText")}
@@ -180,17 +175,17 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
     if (group) {
       return (
         <GroupAutocomplete
-          groupAutocompleteLink={this.props.groupAutocompleteLink}
+          autocompleteLink={this.props.groupAutocompleteLink}
           valueSelected={this.selectName}
-          value={this.state.selectedValue}
+          value={this.state.selectedValue ? this.state.selectedValue : ""}
         />
       );
     }
     return (
       <UserAutocomplete
-        userAutocompleteLink={this.props.userAutocompleteLink}
+        autocompleteLink={this.props.userAutocompleteLink}
         valueSelected={this.selectName}
-        value={this.state.selectedValue}
+        value={this.state.selectedValue ? this.state.selectedValue : ""}
       />
     );
   };

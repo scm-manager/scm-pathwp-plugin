@@ -8,8 +8,8 @@
     "noPermissions": "No path permissions found.",
     "form": {
       "permissionType": "Permission type",
-      "userPermission": "User permission",
-      "groupPermission": "Group permission",
+      "userPermission": "User Permission",
+      "groupPermission": "Group Permission",
       "path": "Path",
       "pathHelpText": "Enter an exact path or a pattern. To protect a complete folder use a star at the end of the path (e.g.: trunk/*).",
       "permission": "Permission",
