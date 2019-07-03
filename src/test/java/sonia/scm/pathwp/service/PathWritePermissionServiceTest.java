@@ -51,7 +51,7 @@ public class PathWritePermissionServiceTest {
 
   @Before
   public void init() {
-    storeFactory = new InMemoryConfigurationStoreFactory(store);
+    storeFactory = new InMemoryConfigurationStoreFactory();
     service = new PathWritePermissionService(storeFactory, null);
   }
 
