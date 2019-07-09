@@ -12,7 +12,6 @@ import sonia.scm.store.ConfigurationStore;
 import sonia.scm.store.ConfigurationStoreFactory;
 import sonia.scm.update.V1Properties;
 import sonia.scm.update.V1PropertyDAO;
-import sonia.scm.update.V1PropertyReader;
 import sonia.scm.version.Version;
 
 import java.io.IOException;
