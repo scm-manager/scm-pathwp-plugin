@@ -14,9 +14,7 @@ import sonia.scm.update.V1Properties;
 import sonia.scm.update.V1PropertyDAO;
 import sonia.scm.version.Version;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +44,7 @@ public class PathWPV2RepositoryConfigMigrationUpdateStep implements UpdateStep {
   }
 
   @Override
-  public void doUpdate() throws IOException {
+  public void doUpdate() {
     v1PropertyDAO
       .getProperties(REPOSITORY_PROPERTY_READER)
       .havingAnyOf(PATHWP_ENABLED, PATHWP_PERMISSIONS)
@@ -66,10 +64,10 @@ public class PathWPV2RepositoryConfigMigrationUpdateStep implements UpdateStep {
       return empty();
     }
 
-    List<String> splittedV1Permissions = Arrays.asList(v1Permissions.replace("[", "").split("]"));
+    String[] splitV1Permissions = v1Permissions.replace("[", "").split("]");
 
     List<PathWritePermission> mappedPermissions = new ArrayList<>();
-    for (String v1Permission : splittedV1Permissions) {
+    for (String v1Permission : splitV1Permissions) {
       mappedPermissions.add(createV2Permission(v1Permission));
     }
 
@@ -81,11 +79,11 @@ public class PathWPV2RepositoryConfigMigrationUpdateStep implements UpdateStep {
   }
 
   private PathWritePermission createV2Permission(String v1Permission) {
-    String[] splittedV1Permission = v1Permission.split(",");
+    String[] splitV1Permission = v1Permission.split(",");
 
-    String path = splittedV1Permission[0];
-    String name = splittedV1Permission[1].replaceAll("@","");
-    boolean group = splittedV1Permission[1].contains("@");
+    String path = splitV1Permission[0];
+    String name = splitV1Permission[1].replaceAll("@","");
+    boolean group = splitV1Permission[1].contains("@");
 
     return new PathWritePermission(path, name, group, Type.ALLOW);
   }

@@ -10,8 +10,6 @@ import sonia.scm.store.ConfigurationStoreFactory;
 import sonia.scm.store.InMemoryConfigurationStoreFactory;
 import sonia.scm.update.V1PropertyDaoTestUtil;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathWPV2RepositoryConfigMigrationUpdateStepTest {
@@ -19,7 +17,7 @@ public class PathWPV2RepositoryConfigMigrationUpdateStepTest {
   private final static String REPO_NAME = "repo";
   private static final String STORE_NAME = "pathWritePermission";
 
-  V1PropertyDaoTestUtil testUtil = new V1PropertyDaoTestUtil();
+  private final V1PropertyDaoTestUtil testUtil = new V1PropertyDaoTestUtil();
 
   private final ConfigurationStoreFactory storeFactory = new InMemoryConfigurationStoreFactory();
 
@@ -31,7 +29,7 @@ public class PathWPV2RepositoryConfigMigrationUpdateStepTest {
   }
 
   @Test
-  public void shouldMigratingMultiplePermissionsForRepository() throws IOException {
+  public void shouldMigratingMultiplePermissionsForRepository() {
     ImmutableMap<String, String> mockedValues =
       ImmutableMap.of(
         "pathwp.permissions","[/test/777/,Tony][/test/path/,@Edi][/java/git/,Steve]",
@@ -58,7 +56,7 @@ public class PathWPV2RepositoryConfigMigrationUpdateStepTest {
   }
 
   @Test
-  public void shouldSkipRepositoriesIfPermissionsAreEmpty() throws IOException {
+  public void shouldSkipRepositoriesIfPermissionsAreEmpty() {
     ImmutableMap<String, String> mockedValues =
       ImmutableMap.of(
         "pathwp.permissions", ""
