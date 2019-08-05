@@ -1,6 +1,7 @@
 package sonia.scm.pathwp.service;
 
-import sonia.scm.group.GroupNames;
+import org.apache.shiro.SecurityUtils;
+import sonia.scm.group.GroupCollector;
 import sonia.scm.repository.NamespaceAndName;
 import sonia.scm.repository.Repository;
 import sonia.scm.repository.RepositoryManager;
@@ -12,6 +13,7 @@ import sonia.scm.util.AssertUtil;
 import sonia.scm.util.GlobUtil;
 
 import javax.inject.Inject;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
 
 /**
@@ -24,12 +26,14 @@ public class PathWritePermissionService {
   public static final String PERMISSION_VERB = "pathwp";
   private ConfigurationStoreFactory storeFactory;
   private RepositoryManager repositoryManager;
+  private GroupCollector groupCollector;
   private static final String STORE_NAME = "pathWritePermission";
 
   @Inject
-  public PathWritePermissionService(ConfigurationStoreFactory storeFactory, RepositoryManager repositoryManager) {
+  public PathWritePermissionService(ConfigurationStoreFactory storeFactory, RepositoryManager repositoryManager, GroupCollector groupCollector) {
     this.storeFactory = storeFactory;
     this.repositoryManager = repositoryManager;
+    this.groupCollector = groupCollector;
   }
 
   /**
@@ -41,18 +45,19 @@ public class PathWritePermissionService {
    * The user is not privileged if there is no permission found for him or one of his groups.
    *
    * @param user
-   * @param userGroups
    * @param repository
    * @param path
    * @return true if the user is permitted to write the path
    */
-  public boolean isPrivileged(User user, GroupNames userGroups, Repository repository, String path) {
+  public boolean isPrivileged(User user, Repository repository, String path) {
     AssertUtil.assertIsNotNull(user);
 
     PathWritePermissions permissions = getPermissions(repository);
     if (!isPluginEnabled(permissions)) {
       return true;
     }
+
+    Set<String> userGroups = groupCollector.collect(SecurityUtils.getSubject().getPrincipal().toString());
 
     BooleanSupplier userAllowed = () -> hasUserPermission(user, path, permissions, PathWritePermission.Type.ALLOW);
     BooleanSupplier anyUserGroupsAllowed = () -> hasAnyGroupPermission(userGroups, path, permissions, PathWritePermission.Type.ALLOW);
@@ -78,7 +83,7 @@ public class PathWritePermissionService {
     RepositoryPermissions.custom(PERMISSION_VERB, repository).check();
   }
 
-  private boolean hasAnyGroupPermission(GroupNames userGroups, String path, PathWritePermissions permissions, PathWritePermission.Type type) {
+  private boolean hasAnyGroupPermission(Set<String> userGroups, String path, PathWritePermissions permissions, PathWritePermission.Type type) {
     return permissions.getPermissions().stream()
       .filter(pathWritePermission -> matchPath(path, pathWritePermission))
       .filter(PathWritePermission::isGroup)

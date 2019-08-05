@@ -6,7 +6,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import sonia.scm.EagerSingleton;
-import sonia.scm.group.GroupNames;
 import sonia.scm.pathwp.service.PathWritePermissionService;
 import sonia.scm.plugin.Extension;
 import sonia.scm.repository.PreReceiveRepositoryHookEvent;
@@ -73,11 +72,9 @@ public class RepositoryHook {
     PrincipalCollection principals = subject.getPrincipals();
 
     User user = principals.oneByType(User.class);
-    GroupNames userGroups = principals.oneByType(GroupNames.class);
-
 
     for (String path : paths) {
-      if (!service.isPrivileged(user, userGroups, repository, path)) {
+      if (!service.isPrivileged(user, repository, path)) {
         throw new PathWritePermissionException("Permission denied for the path " + path);
       }
     }
