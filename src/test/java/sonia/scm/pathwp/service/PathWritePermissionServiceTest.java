@@ -99,17 +99,18 @@ public class PathWritePermissionServiceTest {
 
   @Test
   public void shouldAllowAnyUserIfTheConfigIsDisabled() {
-    PathWritePermissions permissions = new PathWritePermissions();
-    permissions.setEnabled(false);
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
     assertThat(privileged).isTrue();
   }
 
   @Test
+  @SubjectAware(username = "admin", password = "secret")
   public void shouldPrivilegeUserBecauseThePathIsAllowedToTheUser() {
     PathWritePermissions permissions = new PathWritePermissions();
     permissions.getPermissions().add(createPathWritePermission());
+    permissions.setEnabled(true);
+    service.setPermissions(REPOSITORY, permissions);
 
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
@@ -117,11 +118,13 @@ public class PathWritePermissionServiceTest {
   }
 
   @Test
+  @SubjectAware(username = "admin", password = "secret")
   public void shouldPrivilegeUserBecauseAllPathsAreAllowedToTheUser() {
     PathWritePermissions permissions = new PathWritePermissions();
-    permissions.setEnabled(true);
     PathWritePermission pathWritePermission = new PathWritePermission("*", USER.getName(), false, PathWritePermission.Type.ALLOW);
     permissions.getPermissions().add(pathWritePermission);
+    permissions.setEnabled(true);
+    service.setPermissions(REPOSITORY, permissions);
 
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
@@ -129,11 +132,13 @@ public class PathWritePermissionServiceTest {
   }
 
   @Test
+  @SubjectAware(username = "admin", password = "secret")
   public void shouldPrivilegeUserBecauseAllPathsAreAllowedToOneOfHisGroups() {
     PathWritePermissions permissions = new PathWritePermissions();
-    permissions.setEnabled(true);
     PathWritePermission pathWritePermission = new PathWritePermission("*", GROUP_NAME, true, PathWritePermission.Type.ALLOW);
     permissions.getPermissions().add(pathWritePermission);
+    permissions.setEnabled(true);
+    service.setPermissions(REPOSITORY, permissions);
 
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
@@ -141,11 +146,13 @@ public class PathWritePermissionServiceTest {
   }
 
   @Test
+  @SubjectAware(username = "admin", password = "secret")
   public void shouldPrivilegeUserBecauseTheSearchedPathIsAllowedToOneOfHisGroups() {
     PathWritePermissions permissions = new PathWritePermissions();
-    permissions.setEnabled(true);
     PathWritePermission pathWritePermission = new PathWritePermission(PATH, GROUP_NAME, true, PathWritePermission.Type.ALLOW);
     permissions.getPermissions().add(pathWritePermission);
+    permissions.setEnabled(true);
+    service.setPermissions(REPOSITORY, permissions);
 
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
@@ -153,14 +160,15 @@ public class PathWritePermissionServiceTest {
   }
 
   @Test
+  @SubjectAware(username = "admin", password = "secret")
   public void shouldDenyPermissionBecauseAllPathsAreAllowedToTheUserButTheSearchedPathIsDenied() {
     PathWritePermissions permissions = new PathWritePermissions();
-    permissions.setEnabled(true);
     PathWritePermission pathWritePermission = new PathWritePermission("*", USER.getName(), false, PathWritePermission.Type.ALLOW);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, USER.getName(), false, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(pathWritePermission);
     permissions.getPermissions().add(deniedPermission);
-    store.set(permissions);
+    permissions.setEnabled(true);
+    service.setPermissions(REPOSITORY, permissions);
 
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
@@ -168,14 +176,15 @@ public class PathWritePermissionServiceTest {
   }
 
   @Test
+  @SubjectAware(username = "admin", password = "secret")
   public void shouldDenyPermissionBecauseAllPathsAreAllowedToOneOfTheUserGroupsButTheSearchedPathIsDenied() {
     PathWritePermissions permissions = new PathWritePermissions();
-    permissions.setEnabled(true);
     PathWritePermission pathWritePermission = new PathWritePermission("*", GROUP_NAME, true, PathWritePermission.Type.ALLOW);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, USER.getName(), false, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(pathWritePermission);
     permissions.getPermissions().add(deniedPermission);
-    store.set(permissions);
+    permissions.setEnabled(true);
+    service.setPermissions(REPOSITORY, permissions);
 
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
@@ -183,12 +192,13 @@ public class PathWritePermissionServiceTest {
   }
 
   @Test
+  @SubjectAware(username = "admin", password = "secret")
   public void shouldDenyPermissionBecauseTheSearchedPathIsDenied() {
     PathWritePermissions permissions = new PathWritePermissions();
-    permissions.setEnabled(true);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, USER.getName(), false, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(deniedPermission);
-    store.set(permissions);
+    permissions.setEnabled(true);
+    service.setPermissions(REPOSITORY, permissions);
 
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
@@ -196,12 +206,13 @@ public class PathWritePermissionServiceTest {
   }
 
   @Test
+  @SubjectAware(username = "admin", password = "secret")
   public void shouldDenyPermissionBecauseTheSearchedPathIsDeniedToOneOfTheUserGroups() {
     PathWritePermissions permissions = new PathWritePermissions();
-    permissions.setEnabled(true);
     PathWritePermission deniedPermission = new PathWritePermission(PATH, GROUP_NAME, true, PathWritePermission.Type.DENY);
     permissions.getPermissions().add(deniedPermission);
-    store.set(permissions);
+    permissions.setEnabled(true);
+    service.setPermissions(REPOSITORY, permissions);
 
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
@@ -209,12 +220,13 @@ public class PathWritePermissionServiceTest {
   }
 
   @Test
+  @SubjectAware(username = "admin", password = "secret")
   public void shouldDenyPermissionBecauseThereIsNoStoredPermissionForTheSearchedPath() {
     PathWritePermissions permissions = new PathWritePermissions();
-    permissions.setEnabled(true);
     PathWritePermission deniedPermission = new PathWritePermission("other_path", USER.getName(), false, PathWritePermission.Type.ALLOW);
     permissions.getPermissions().add(deniedPermission);
-    store.set(permissions);
+    permissions.setEnabled(true);
+    service.setPermissions(REPOSITORY, permissions);
 
     boolean privileged = service.isPrivileged(USER, REPOSITORY, PATH);
 
