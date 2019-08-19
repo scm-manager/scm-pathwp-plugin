@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE plugin SYSTEM "https://download.scm-manager.org/dtd/plugin/2.0.0-01.dtd">
 <!--
 
@@ -33,11 +33,13 @@
 
 -->
 <plugin>
+
   <scm-version>2</scm-version>
+
   <information>
-    <author>Sebastian Sdorra</author>
-    <url>https://bitbucket.org/scm-manager/scm-pathwp-plugin</url>
-    <wiki>https://bitbucket.org/sdorra/scm-manager/wiki/pathwp-plugin</wiki>
+    <displayName>Path Write Protection</displayName>
+    <author>Cloudogu GmbH</author>
+    <category>Authorization</category>
   </information>
 
 </plugin>
