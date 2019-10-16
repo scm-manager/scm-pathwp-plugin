@@ -42,4 +42,8 @@
     <category>Authorization</category>
   </information>
 
+  <resources>
+    <script>assets/scm-pathwp-plugin.bundle.js</script>
+  </resources>
+
 </plugin>

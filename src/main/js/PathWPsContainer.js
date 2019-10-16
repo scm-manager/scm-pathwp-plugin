@@ -1,7 +1,7 @@
 // @flow
 import React from "react";
-import { Configuration } from "@scm-manager/ui-components";
 import type { Repository } from "@scm-manager/ui-types";
+import { Configuration } from "@scm-manager/ui-components";
 import PathWPsForm from "./PathWPsForm";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
   indexLinks: Object
 };
 
-class PathWPsContainer extends React.Component<Props> {
+export default class PathWPsContainer extends React.Component<Props> {
   render() {
     const { link, indexLinks } = this.props;
     const userAutoCompleteLink = indexLinks.autocomplete.find(
@@ -33,5 +33,3 @@ class PathWPsContainer extends React.Component<Props> {
     );
   }
 }
-
-export default PathWPsContainer;

@@ -1,8 +1,8 @@
 //@flow
 import React from "react";
 import { translate } from "react-i18next";
-import type { PathWPs, PathWP } from "./types/PathWP";
 import { Checkbox, Subtitle } from "@scm-manager/ui-components";
+import type { PathWPs, PathWP } from "./types/PathWP";
 import PathWPTable from "./table/PathWPTable";
 import AddPermissionFormComponent from "./AddPermissionFormComponent";
 
