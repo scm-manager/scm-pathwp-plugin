@@ -1,7 +1,6 @@
-// @flow
 import React from "react";
-import { translate } from "react-i18next";
-import type { SelectValue } from "@scm-manager/ui-types";
+import { WithTranslation, withTranslation } from "react-i18next";
+import { SelectValue } from "@scm-manager/ui-types";
 import {
   Button,
   InputField,
@@ -12,21 +11,18 @@ import {
   GroupAutocomplete,
   UserAutocomplete
 } from "@scm-manager/ui-components";
-import type { PathWP } from "./types/PathWP";
+import { PathWP } from "./types/PathWP";
 
-type Props = {
-  userAutocompleteLink: string,
-  groupAutocompleteLink: string,
-  readOnly: boolean,
-  onAdd: PathWP => void,
-
-  // Context props
-  t: string => string
+type Props = WithTranslation & {
+  userAutocompleteLink: string;
+  groupAutocompleteLink: string;
+  readOnly: boolean;
+  onAdd: (p: PathWP) => void;
 };
 
 type State = {
-  pathProtectionPermission: PathWP,
-  selectedValue?: SelectValue
+  pathProtectionPermission: PathWP;
+  selectedValue?: SelectValue;
 };
 
 const defaultState = {
@@ -98,9 +94,7 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
         <Subtitle subtitle={t("scm-pathwp-plugin.addSubtitle")} />
         <div className="columns is-multiline">
           <div className="column is-full">
-            <label className="label">
-              {t("scm-pathwp-plugin.form.permissionType")}
-            </label>
+            <label className="label">{t("scm-pathwp-plugin.form.permissionType")}</label>
             <div className="field is-grouped">
               <div className="control">
                 <Radio
@@ -150,15 +144,13 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
                 <Button
                   label={t("scm-pathwp-plugin.form.add")}
                   disabled={
-                    this.props.readOnly ||
-                    !path ||
-                    !(
-                      this.state.selectedValue && this.state.selectedValue.label
-                    )
+                    this.props.readOnly || !path || !(this.state.selectedValue && this.state.selectedValue.label)
                   }
                   action={() => {
                     this.props.onAdd(this.state.pathProtectionPermission);
-                    this.setState({ ...defaultState });
+                    this.setState({
+                      ...defaultState
+                    });
                   }}
                   className="label-icon-spacing"
                 />
@@ -191,4 +183,4 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
   };
 }
 
-export default translate("plugins")(AddPermissionFormComponent);
+export default withTranslation("plugins")(AddPermissionFormComponent);

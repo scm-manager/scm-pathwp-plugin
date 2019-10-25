@@ -1,20 +1,16 @@
-//@flow
 import React from "react";
-import { translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 import { Checkbox, Subtitle } from "@scm-manager/ui-components";
-import type { PathWPs, PathWP } from "./types/PathWP";
+import { PathWPs, PathWP } from "./types/PathWP";
 import PathWPTable from "./table/PathWPTable";
 import AddPermissionFormComponent from "./AddPermissionFormComponent";
 
-type Props = {
-  initialConfiguration: PathWPs,
-  readOnly: boolean,
-  onConfigurationChange: (PathWPs, boolean) => void,
-  userAutocompleteLink: string,
-  groupAutocompleteLink: string,
-
-  // context prop
-  t: string => string
+type Props = WithTranslation & {
+  initialConfiguration: PathWPs;
+  readOnly: boolean;
+  onConfigurationChange: (p1: PathWPs, p2: boolean) => void;
+  userAutocompleteLink: string;
+  groupAutocompleteLink: string;
 };
 
 type State = PathWPs & {};
@@ -22,31 +18,32 @@ type State = PathWPs & {};
 class PathWPsForm extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { ...props.initialConfiguration };
+    this.state = {
+      ...props.initialConfiguration
+    };
   }
 
   isValid() {
     const { permissions } = this.state;
     let valid = true;
     permissions.map(pathWP => {
-      valid =
-        valid &&
-        pathWP.name.trim() !== "" &&
-        pathWP.path.trim() !== "" &&
-        pathWP.type.trim() !== "";
+      valid = valid && pathWP.name.trim() !== "" && pathWP.path.trim() !== "" && pathWP.type.trim() !== "";
     });
     return valid;
   }
 
   updatePathWPs(permissions) {
-    this.setState({ permissions }, () =>
-      this.props.onConfigurationChange(this.state, this.isValid())
+    this.setState(
+      {
+        permissions
+      },
+      () => this.props.onConfigurationChange(this.state, this.isValid())
     );
   }
 
   onDelete = deletedPathWP => {
     const { permissions } = this.state;
-    let index = permissions.indexOf(deletedPathWP);
+    const index = permissions.indexOf(deletedPathWP);
     permissions.splice(index, 1);
     this.updatePathWPs(permissions);
   };
@@ -70,9 +67,14 @@ class PathWPsForm extends React.Component<Props, State> {
   };
 
   onChangeEnabled = isEnabled => {
-    this.setState({ enabled: isEnabled }, () => {
-      this.props.onConfigurationChange(this.state, this.isValid());
-    });
+    this.setState(
+      {
+        enabled: isEnabled
+      },
+      () => {
+        this.props.onConfigurationChange(this.state, this.isValid());
+      }
+    );
   };
 
   renderAddUserFormComponent = () => {
@@ -105,10 +107,7 @@ class PathWPsForm extends React.Component<Props, State> {
           <>
             <hr />
             <Subtitle subtitle={t("scm-pathwp-plugin.editSubtitle")} />
-            <PathWPTable
-              permissions={this.state.permissions}
-              onDelete={this.onDelete}
-            />
+            <PathWPTable permissions={this.state.permissions} onDelete={this.onDelete} />
             {this.renderAddUserFormComponent()}
           </>
         ) : null}
@@ -117,4 +116,4 @@ class PathWPsForm extends React.Component<Props, State> {
   }
 }
 
-export default translate("plugins")(PathWPsForm);
+export default withTranslation("plugins")(PathWPsForm);

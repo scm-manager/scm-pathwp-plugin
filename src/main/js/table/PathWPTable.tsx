@@ -1,16 +1,12 @@
-// @flow
 import React from "react";
-import { translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 import { LabelWithHelpIcon, Notification } from "@scm-manager/ui-components";
-import type { PathWP } from "../types/PathWP";
+import { PathWP } from "../types/PathWP";
 import PathWPRow from "./PathWPRow";
 
-type Props = {
-  permissions: PathWP[],
-  onDelete: PathWP => void,
-
-  // context prop
-  t: string => string
+type Props = WithTranslation & {
+  permissions: PathWP[];
+  onDelete: (p: PathWP) => void;
 };
 
 class PathWPTable extends React.Component<Props> {
@@ -50,12 +46,8 @@ class PathWPTable extends React.Component<Props> {
         </table>
       );
     }
-    return (
-      <Notification type="info">
-        {t("scm-pathwp-plugin.noPermissions")}
-      </Notification>
-    );
+    return <Notification type="info">{t("scm-pathwp-plugin.noPermissions")}</Notification>;
   }
 }
 
-export default translate("plugins")(PathWPTable);
+export default withTranslation("plugins")(PathWPTable);

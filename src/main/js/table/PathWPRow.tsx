@@ -1,16 +1,12 @@
-// @flow
 import React from "react";
-import { translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 import styled from "styled-components";
 import { confirmAlert, Icon } from "@scm-manager/ui-components";
-import type { PathWP } from "../types/PathWP";
+import { PathWP } from "../types/PathWP";
 
-type Props = {
-  permission: PathWP,
-  onDelete: PathWP => void,
-
-  // context props
-  t: string => string
+type Props = WithTranslation & {
+  permission: PathWP;
+  onDelete: (p: PathWP) => void;
 };
 
 const VCenteredTd = styled.td`
@@ -55,11 +51,7 @@ class PathWPRow extends React.Component<Props> {
         <td>{permission.path}</td>
         <td>{permission.type}</td>
         <VCenteredTd className="is-darker">
-          <a
-            className="level-item"
-            onClick={this.confirmDelete}
-            title={t("scm-pathwp-plugin.table.delete")}
-          >
+          <a className="level-item" onClick={this.confirmDelete} title={t("scm-pathwp-plugin.table.delete")}>
             <span className="icon is-small">
               <Icon name="trash" color="inherit" />
             </span>
@@ -70,4 +62,4 @@ class PathWPRow extends React.Component<Props> {
   }
 }
 
-export default translate("plugins")(PathWPRow);
+export default withTranslation("plugins")(PathWPRow);
