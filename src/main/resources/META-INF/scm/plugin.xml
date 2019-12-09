@@ -42,6 +42,10 @@
     <category>Authorization</category>
   </information>
 
+  <conditions>
+    <min-version>${project.parent.version}</min-version>
+  </conditions>
+
   <resources>
     <script>assets/scm-pathwp-plugin.bundle.js</script>
   </resources>
