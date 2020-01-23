@@ -30,7 +30,8 @@
       "message": "Soll die Pfad-Berechtigung wirklich gelöscht werden?",
       "submit": "Ja (Speichern nicht vergessen)",
       "cancel": "Nein"
-    }
+    },
+    "obstacle": "Sie dürfen den Pfad nicht verändern."
   },
   "permissions": {
     "repository": {
