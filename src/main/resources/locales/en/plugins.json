@@ -30,7 +30,8 @@
       "message": "Do you really want to delete the Path Permission?",
       "submit": "Yes (do not forget to submit)",
       "cancel": "No"
-    }
+    },
+    "obstacle": "You do not have permissions to modify the path."
   },
   "permissions": {
     "repository": {
