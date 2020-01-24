@@ -51,11 +51,6 @@ public class RepositoryHook {
       return;
     }
 
-    if (PathWritePermissionService.isPermitted(repository)) {
-      log.debug("skip pathwp check for {}, because the user has modify privileges to the repository", repository.getNamespaceAndName());
-      return;
-    }
-
     if (!service.isPluginEnabled(repository)){
       log.trace("pathwp plugin is disabled.");
       return;
@@ -64,15 +59,15 @@ public class RepositoryHook {
     log.trace("received hook for repository {}", repository.getName());
     Set<String> paths = collectPath(context, repository);
 
-    checkIfUserIsPrivileged(repository, paths);
-  }
-
-  private void checkIfUserIsPrivileged(Repository repository, Set<String> paths) {
     Subject subject = SecurityUtils.getSubject();
     PrincipalCollection principals = subject.getPrincipals();
 
     User user = principals.oneByType(User.class);
 
+    checkIfUserIsPrivileged(repository, user, paths);
+  }
+
+  private void checkIfUserIsPrivileged(Repository repository, User user, Set<String> paths) {
     for (String path : paths) {
       if (!service.isPrivileged(user, repository, path)) {
         throw new PathWritePermissionException("Permission denied for the path " + path);

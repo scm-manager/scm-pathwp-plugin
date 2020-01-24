@@ -2,7 +2,7 @@
   "scm-pathwp-plugin": {
     "navLink": "Path Permissions",
     "enable": "Enable Path Write Permissions",
-    "enableHelpText": "If enabled, nobody can write to the repository except administrators, repository owners and the specified rules.",
+    "enableHelpText": "If enabled, nobody can write to the repository except when permitted by the specified rules.",
     "editSubtitle": "Write permissions for paths",
     "addSubtitle": "Add permission",
     "noPermissions": "No path permissions found.",
