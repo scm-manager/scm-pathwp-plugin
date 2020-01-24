@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Implement check for editor plugin ([#1](https://github.com/scm-manager/scm-pathwp-plugin/pull/1))
+- Let checks work for admins, too ([#2](https://github.com/scm-manager/scm-pathwp-plugin/pull/2))
 
 ## [rc1] - 2019-12-2
 
