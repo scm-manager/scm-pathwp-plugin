@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Implement check for editor plugin ([#1](https://github.com/scm-manager/scm-pathwp-plugin/pull/1))
 - Let checks work for admins, too ([#2](https://github.com/scm-manager/scm-pathwp-plugin/pull/2))
+- Add swagger rest annotations to generate openAPI specs for the scm-openapi-plugin. ([#3](https://github.com/scm-manager/scm-pathwp-plugin/pull/3))
+
 
 ## 2.0.0-rc1 - 2019-12-2
 
