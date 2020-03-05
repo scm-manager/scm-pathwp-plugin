@@ -41,7 +41,7 @@ public class PathWritePermissionResource {
   @GET
   @Path("/{namespace}/{name}")
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Get pathWP configuration", description = "Returns the pathwp configuration.", tags = "PathWP Plugin")
+  @Operation(summary = "Get pathWP configuration", description = "Returns the pathwp configuration.", tags = "PathWP Plugin", operationId = "pathwp_get")
   @ApiResponse(
     responseCode = "200",
     description = "success",
@@ -68,7 +68,7 @@ public class PathWritePermissionResource {
   @PUT
   @Path("/{namespace}/{name}")
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Update pathwp configuration", description = "Modifies the pathwp configuration.", tags = "PathWP Plugin")
+  @Operation(summary = "Update pathwp configuration", description = "Modifies the pathwp configuration.", tags = "PathWP Plugin", operationId = "pathwp_put")
   @ApiResponse(responseCode = "204", description = "update success")
   @ApiResponse(responseCode = "401", description = "not authenticated / invalid credentials")
   @ApiResponse(responseCode = "403", description = "not authorized /  the current user does not have the right privilege")
