@@ -28,6 +28,7 @@ import com.cloudogu.scm.editor.ChangeObstacle;
 import org.apache.shiro.SecurityUtils;
 import sonia.scm.pathwp.service.PathWritePermissionService;
 import sonia.scm.plugin.Extension;
+import sonia.scm.plugin.Requires;
 import sonia.scm.repository.NamespaceAndName;
 import sonia.scm.repository.Repository;
 import sonia.scm.repository.RepositoryManager;
@@ -43,7 +44,8 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.stream.Stream.concat;
 
-@Extension(requires = "scm-editor-plugin")
+@Extension
+@Requires("scm-editor-plugin")
 public class PathWritePermissionChangeGuard implements ChangeGuard {
 
   private final PathWritePermissionService service;
