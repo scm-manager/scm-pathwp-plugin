@@ -65,9 +65,7 @@ class PathCollector implements Closeable {
   }
 
   private void collect(Modifications modifications) {
-    append(modifications.getAdded());
-    append(modifications.getModified());
-    append(modifications.getRemoved());
+    append(modifications.getEffectedPaths());
   }
 
   private void append(Iterable<String> modifiedPaths) {
