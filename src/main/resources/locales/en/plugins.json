@@ -46,7 +46,7 @@
   "verbs": {
     "repository": {
       "pathwp": {
-        "displayName": "modify path permissions",
+        "displayName": "Modify path permissions",
         "description": "May modify path permissions"
       }
     }
