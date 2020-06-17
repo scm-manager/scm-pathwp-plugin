@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Added
 - Documentation in English and German ([#6](https://github.com/scm-manager/scm-pathwp-plugin/pull/6))
+### Fixed
+- Fixed permission scope switch
 
 ## 2.0.0 - 2020-06-04
 ### Changed
