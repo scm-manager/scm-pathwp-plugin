@@ -95,8 +95,15 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
     });
   };
 
-  permissionScopeChanged = event => {
-    const group = event.target.value === "GROUP_PERMISSION";
+  choosePermissionUserScope = () => {
+    this.changePermissionScope(false);
+  };
+
+  choosePermissionGroupScope = () => {
+    this.changePermissionScope(true);
+  };
+
+  changePermissionScope = (group: boolean) => {
     this.setState({
       ...this.state,
       pathProtectionPermission: {
@@ -123,16 +130,14 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
                 <Radio
                   label={t("scm-pathwp-plugin.form.userPermission")}
                   name="permission_scope"
-                  value="USER_PERMISSION"
                   checked={!this.state.pathProtectionPermission.group}
-                  onChange={this.permissionScopeChanged}
+                  onChange={this.choosePermissionUserScope}
                 />
                 <Radio
                   label={t("scm-pathwp-plugin.form.groupPermission")}
                   name="permission_scope"
-                  value="GROUP_PERMISSION"
                   checked={this.state.pathProtectionPermission.group}
-                  onChange={this.permissionScopeChanged}
+                  onChange={this.choosePermissionGroupScope}
                 />
               </div>
             </div>
