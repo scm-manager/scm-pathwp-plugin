@@ -83,7 +83,7 @@ public class PathWPV2RepositoryConfigMigrationUpdateStep implements UpdateStep {
     LOG.debug("migrating repository specific pathwp configuration for repository id {}", repositoryId);
 
     String v1Permissions = properties.get(PATHWP_PERMISSIONS);
-    if (Strings.isNullOrEmpty(v1Permissions)) {
+    if (Strings.isNullOrEmpty(v1Permissions) || v1Permissions.equals("false")) {
       return empty();
     }
 
