@@ -91,7 +91,7 @@ public class PathWPV2RepositoryConfigMigrationUpdateStep implements UpdateStep {
 
     List<PathWritePermission> mappedPermissions = new ArrayList<>();
     for (String v1Permission : splitV1Permissions) {
-      mappedPermissions.add(createV2Permission(v1Permission));
+      createV2Permission(v1Permission).ifPresent(mappedPermissions::add);
     }
 
     PathWritePermissions v2Permissions = new PathWritePermissions();
@@ -101,14 +101,17 @@ public class PathWPV2RepositoryConfigMigrationUpdateStep implements UpdateStep {
     return of(v2Permissions);
   }
 
-  private PathWritePermission createV2Permission(String v1Permission) {
+  private Optional<PathWritePermission> createV2Permission(String v1Permission) {
     String[] splitV1Permission = v1Permission.split(",");
+    if (splitV1Permission.length != 2) {
+      return empty();
+    }
 
     String path = splitV1Permission[0];
     String name = splitV1Permission[1].replaceAll("@","");
     boolean group = splitV1Permission[1].contains("@");
 
-    return new PathWritePermission(path, name, group, Type.ALLOW);
+    return of(new PathWritePermission(path, name, group, Type.ALLOW));
   }
 
   @Override
