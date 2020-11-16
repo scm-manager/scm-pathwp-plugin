@@ -79,6 +79,19 @@ public class PathWPV2RepositoryConfigMigrationUpdateStepTest {
   }
 
   @Test
+  public void shouldMigrateDisabledSetting() {
+    ImmutableMap<String, String> mockedValues =
+      ImmutableMap.of(
+        "pathwp.permissions", "false"
+      );
+    testUtil.mockRepositoryProperties(new V1PropertyDaoTestUtil.PropertiesForRepository(REPO_NAME, mockedValues));
+
+    updateStep.doUpdate();
+
+    assertThat(getConfigStore().get()).isNull();
+  }
+
+  @Test
   public void shouldSkipRepositoriesIfPermissionsAreEmpty() {
     ImmutableMap<String, String> mockedValues =
       ImmutableMap.of(
@@ -89,6 +102,20 @@ public class PathWPV2RepositoryConfigMigrationUpdateStepTest {
     updateStep.doUpdate();
 
     assertThat(getConfigStore().get()).isNull();
+  }
+
+  @Test
+  public void shouldSkipRepositoriesIfPermissionsAreIncomplete() {
+    ImmutableMap<String, String> mockedValues =
+      ImmutableMap.of(
+        "pathwp.permissions", "[/test/path/,]"
+      );
+    testUtil.mockRepositoryProperties(new V1PropertyDaoTestUtil.PropertiesForRepository(REPO_NAME, mockedValues));
+
+    updateStep.doUpdate();
+
+    assertThat(getConfigStore().get().isEnabled()).isFalse();
+    assertThat(getConfigStore().get().getPermissions()).isEmpty();
   }
 
   private ConfigurationStore<PathWritePermissions> getConfigStore() {
