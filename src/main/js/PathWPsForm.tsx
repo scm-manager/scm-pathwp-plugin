@@ -120,6 +120,7 @@ class PathWPsForm extends React.Component<Props, State> {
 
     return (
       <>
+        <Subtitle subtitle={t("scm-pathwp-plugin.subtitle")} />
         <Checkbox
           checked={enabled}
           onChange={this.onChangeEnabled}
