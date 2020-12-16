@@ -1,23 +1,24 @@
 {
   "scm-pathwp-plugin": {
     "navLink": "Path Permissions",
+    "subtitle": "Path Permissions",
     "enable": "Enable Path Write Permissions",
     "enableHelpText": "If enabled, nobody can write to the repository except when permitted by the specified rules.",
-    "editSubtitle": "Write permissions for paths",
-    "addSubtitle": "Add permission",
+    "editSubtitle": "Write Permissions for Paths",
+    "addSubtitle": "Add Permission",
     "noPermissions": "No path permissions found.",
     "form": {
-      "permissionType": "Permission type",
+      "permissionType": "Permission Type",
       "userPermission": "User Permission",
       "groupPermission": "Group Permission",
       "path": "Path",
       "pathHelpText": "Enter an exact path or a pattern. To protect a complete folder use a star at the end of the path (e.g.: trunk/*).",
       "permission": "Permission",
       "permissionHelpText": "Select the path write permission",
-      "add": "Add"
+      "add": "Add Permission"
     },
     "table": {
-      "name": "User or group",
+      "name": "User or Group",
       "nameHelpText": "Manage permissions for a specific user or group.",
       "path": "Path",
       "permission": "Permission",

@@ -1,11 +1,12 @@
 {
   "scm-pathwp-plugin": {
     "navLink": "Pfad-Berechtigungen",
+    "subtitle": "Pfad-Berechtigungen",
     "enable": "Schreib-Berechtigungen für Pfade aktivieren",
     "enableHelpText": "Wenn diese Option aktiv ist, kann das Repository nur entsprechend der spezifizierten Regeln geschrieben werden.",
     "editSubtitle": "Schreib-Berechtigungen für Pfade",
     "addSubtitle": "Berechtigung hinzufügen",
-    "noPermissions": "Keine Pfad-Berechtigungen gefunden",
+    "noPermissions": "Keine Pfad-Berechtigungen gefunden.",
     "form": {
       "permissionType": "Art der Berechtigung",
       "userPermission": "Benutzer berechtigen",
