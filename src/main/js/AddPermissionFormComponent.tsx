@@ -177,7 +177,8 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
                       pathProtectionPermission: {
                         ...defaultState.pathProtectionPermission,
                         path: pathProtectionPermission.path,
-                        group: pathProtectionPermission.group
+                        group: pathProtectionPermission.group,
+                        type: pathProtectionPermission.type
                       }
                     });
                   }}
