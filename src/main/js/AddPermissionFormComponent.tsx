@@ -66,7 +66,6 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
 
   handleDropDownChange = (type: string) => {
     this.setState({
-      ...this.state,
       pathProtectionPermission: {
         ...this.state.pathProtectionPermission,
         type
@@ -76,7 +75,6 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
 
   selectName = (selection: SelectValue) => {
     this.setState({
-      ...this.state,
       pathProtectionPermission: {
         ...this.state.pathProtectionPermission,
         name: selection.value.id
@@ -87,7 +85,6 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
 
   handlePathExpressionChange = (path: string) => {
     this.setState({
-      ...this.state,
       pathProtectionPermission: {
         ...this.state.pathProtectionPermission,
         path
@@ -105,7 +102,6 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
 
   changePermissionScope = (group: boolean) => {
     this.setState({
-      ...this.state,
       pathProtectionPermission: {
         ...this.state.pathProtectionPermission,
         group
@@ -176,8 +172,14 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
                   }
                   action={() => {
                     this.props.onAdd(this.state.pathProtectionPermission);
-                    this.setState({
-                      ...defaultState
+                    this.setState ({
+                      ...defaultState,
+                      pathProtectionPermission: {
+                        ...defaultState.pathProtectionPermission,
+                        path: pathProtectionPermission.path,
+                        group: pathProtectionPermission.group,
+                        type: pathProtectionPermission.type
+                      }
                     });
                   }}
                   className="label-icon-spacing"
