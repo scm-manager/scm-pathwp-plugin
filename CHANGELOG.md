@@ -5,13 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.0 - 2022-01-24
+### Changed
+- Keeps the path and the selection whether to add a user or a group permission ([#31](https://github.com/scm-manager/scm-pathwp-plugin/pull/31))
+
 ## 2.0.2 - 2020-11-16
-###
+### Fixed
 - Fixed broken migration with disabled or invalid configuration ([#10](https://github.com/scm-manager/scm-pathwp-plugin/pull/10), [#11](https://github.com/scm-manager/scm-pathwp-plugin/issues/11) and [#12](https://github.com/scm-manager/scm-pathwp-plugin/pull/12))
 
 ## 2.0.1 - 2020-06-17
 ### Added
 - Documentation in English and German ([#6](https://github.com/scm-manager/scm-pathwp-plugin/pull/6))
+
 ### Fixed
 - Fixed permission scope switch ([#7](https://github.com/scm-manager/scm-pathwp-plugin/pull/7))
 
