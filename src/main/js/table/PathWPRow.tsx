@@ -49,6 +49,7 @@ class PathWPRow extends React.Component<Props> {
           onClick: () => onDelete(permission)
         },
         {
+          className: "is-info",
           label: t("scm-pathwp-plugin.confirmDeleteAlert.cancel"),
           onClick: () => null
         }
