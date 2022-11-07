@@ -13,6 +13,10 @@
       "groupPermission": "Gruppe berechtigen",
       "path": "Pfad",
       "pathHelpText": "Eingabe eines Pfadnamen oder eines Musters. Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden (z.B.: trunk/*).",
+      "branch": "Branch",
+      "branchHelpText": "Branch-Name oder -Muster für die Einschränkung des Schreibschutzes. Es können Muster wie \"*\" (alle Branches) oder \"bugfix/*\" (alle Bugfix-Branches) genutzt werden.",
+      "branchScope": "Branch Filter",
+      "branchScopeHelpText": "Art des Filters für Branches.",
       "permission": "Berechtigung",
       "permissionHelpText": "Auswahl der Berechtigung.",
       "add": "Hinzufügen"
@@ -21,10 +25,12 @@
       "name": "Benutzer oder Gruppe",
       "nameHelpText": "Verwaltung von Berechtigungen für Benutzer und Gruppen",
       "path": "Pfad",
+      "branch": "Branch",
+      "branchScope": "Branch Filter",
       "permission": "Berechtigung",
-      "group" : "Gruppe",
+      "group": "Gruppe",
       "user": "Benutzer",
-      "delete" : "Löschen"
+      "delete": "Löschen"
     },
     "confirmDeleteAlert": {
       "title": "Löschen der Pfad-Berechtigung",

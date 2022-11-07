@@ -13,6 +13,10 @@
       "groupPermission": "Group Permission",
       "path": "Path",
       "pathHelpText": "Enter an exact path or a pattern. To protect a complete folder use a star at the end of the path (e.g.: trunk/*).",
+      "branch": "Branch",
+      "branchHelpText": "Enter an exact branch name or a pattern. To protect a set of branches use a star at the end of the branch (e.g.: \"bugfix/*\") or only the star for all branches (e.g.: \"*\").",
+      "branchScope": "Branch Scope",
+      "branchScopeHelpText": "Scope which branches will be affected.",
       "permission": "Permission",
       "permissionHelpText": "Select the path write permission",
       "add": "Add Permission"
@@ -21,10 +25,12 @@
       "name": "User or Group",
       "nameHelpText": "Manage permissions for a specific user or group.",
       "path": "Path",
+      "branch": "Branch",
+      "branchScope": "Branch Scope",
       "permission": "Permission",
       "group": "Group",
       "user": "User",
-      "delete" : "Delete"
+      "delete": "Delete"
     },
     "confirmDeleteAlert": {
       "title": "Delete Path Permission",

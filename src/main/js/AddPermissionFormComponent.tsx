@@ -26,12 +26,12 @@ import { WithTranslation, withTranslation } from "react-i18next";
 import { SelectValue } from "@scm-manager/ui-types";
 import {
   Button,
-  InputField,
-  Radio,
   DropDown,
-  Subtitle,
-  LabelWithHelpIcon,
   GroupAutocomplete,
+  InputField,
+  LabelWithHelpIcon,
+  Radio,
+  Subtitle,
   UserAutocomplete
 } from "@scm-manager/ui-components";
 import { PathWP } from "./types/PathWP";
@@ -53,6 +53,8 @@ const defaultState = {
     name: "",
     type: "ALLOW",
     path: "",
+    branch: "*",
+    branchScope: "INCLUDE",
     group: false
   },
   selectedValue: undefined
@@ -64,11 +66,20 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
     this.state = defaultState;
   }
 
-  handleDropDownChange = (type: string) => {
+  handleTypeChange = (type: string) => {
     this.setState({
       pathProtectionPermission: {
         ...this.state.pathProtectionPermission,
         type
+      }
+    });
+  };
+
+  handleBranchScopeChange = (branchScope: string) => {
+    this.setState({
+      pathProtectionPermission: {
+        ...this.state.pathProtectionPermission,
+        branchScope
       }
     });
   };
@@ -88,6 +99,15 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
       pathProtectionPermission: {
         ...this.state.pathProtectionPermission,
         path
+      }
+    });
+  };
+
+  handleBranchExpressionChange = (branch: string) => {
+    this.setState({
+      pathProtectionPermission: {
+        ...this.state.pathProtectionPermission,
+        branch
       }
     });
   };
@@ -113,7 +133,7 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
   render() {
     const { t, readOnly } = this.props;
     const { pathProtectionPermission } = this.state;
-    const { path } = pathProtectionPermission;
+    const { path, branch } = pathProtectionPermission;
     return (
       <>
         <hr />
@@ -149,6 +169,29 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
               disabled={readOnly}
             />
           </div>
+          <div className="column is-half">
+            <InputField
+              name={"branch"}
+              placeholder={t("scm-pathwp-plugin.form.branch")}
+              label={t("scm-pathwp-plugin.form.branch")}
+              helpText={t("scm-pathwp-plugin.form.branchHelpText")}
+              value={branch}
+              onChange={this.handleBranchExpressionChange}
+              disabled={readOnly}
+            />
+          </div>
+          <div className="column is-half">
+            <LabelWithHelpIcon
+              label={t("scm-pathwp-plugin.form.branchScope")}
+              helpText={t("scm-pathwp-plugin.form.branchScopeHelpText")}
+            />
+            <DropDown
+              options={["INCLUDE", "EXCLUDE"]}
+              optionSelected={this.handleBranchScopeChange}
+              preselectedOption={this.state.pathProtectionPermission.branchScope}
+              disabled={readOnly}
+            />
+          </div>
           <div className="column">{this.renderAutocomplete()}</div>
           <div className="column">
             <div className="columns">
@@ -159,7 +202,7 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
                 />
                 <DropDown
                   options={["ALLOW", "DENY"]}
-                  optionSelected={this.handleDropDownChange}
+                  optionSelected={this.handleTypeChange}
                   preselectedOption={this.state.pathProtectionPermission.type}
                   disabled={readOnly}
                 />
@@ -172,13 +215,15 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
                   }
                   action={() => {
                     this.props.onAdd(this.state.pathProtectionPermission);
-                    this.setState ({
+                    this.setState({
                       ...defaultState,
                       pathProtectionPermission: {
                         ...defaultState.pathProtectionPermission,
                         path: pathProtectionPermission.path,
-                        group: pathProtectionPermission.group,
-                        type: pathProtectionPermission.type
+                        pathType: pathProtectionPermission.pathType,
+                        branch: pathProtectionPermission.branch,
+                        branchType: pathProtectionPermission.branchType,
+                        group: pathProtectionPermission.group
                       }
                     });
                   }}

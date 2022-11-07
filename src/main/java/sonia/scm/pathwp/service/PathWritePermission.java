@@ -44,12 +44,18 @@ import java.io.Serializable;
 public class PathWritePermission implements Serializable {
 
   private String path;
+  private String branch;
+  private BranchScope branchScope;
   private String name;
   private boolean group;
   private Type type;
 
   public enum Type {
     ALLOW, DENY
+  }
+
+  public enum BranchScope {
+    INCLUDE, EXCLUDE
   }
 
 }

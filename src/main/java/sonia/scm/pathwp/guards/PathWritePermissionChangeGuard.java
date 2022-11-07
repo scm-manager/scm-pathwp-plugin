@@ -70,14 +70,14 @@ public class PathWritePermissionChangeGuard implements ChangeGuard {
           changes.getPathForCreate().map(path -> path + "/something").map(Stream::of).orElse(Stream.empty())
         )
       )
-    ).map(path -> getObstacles(repository, user, path))
+    ).map(path -> getObstacles(repository, user, branch, path))
       .filter(Optional::isPresent)
       .map(Optional::get)
       .collect(Collectors.toList());
   }
 
-  private Optional<ChangeObstacle> getObstacles(Repository repository, User user, String path) {
-    if (service.isPrivileged(user, repository, path)) {
+  private Optional<ChangeObstacle> getObstacles(Repository repository, User user, String branch, String path) {
+    if (service.isPrivileged(user, repository, branch, path)) {
       return empty();
     } else {
       return of(new ChangeObstacle() {

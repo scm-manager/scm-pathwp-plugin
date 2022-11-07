@@ -61,6 +61,8 @@ class PathWPTable extends React.Component<Props> {
                 />
               </th>
               <th>{t("scm-pathwp-plugin.table.path")}</th>
+              <th>{t("scm-pathwp-plugin.table.branch")}</th>
+              <th>{t("scm-pathwp-plugin.table.branchScope")}</th>
               <th>{t("scm-pathwp-plugin.table.permission")}</th>
               <th />
             </tr>

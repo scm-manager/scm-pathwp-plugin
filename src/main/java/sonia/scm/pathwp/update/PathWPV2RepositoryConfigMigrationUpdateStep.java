@@ -108,10 +108,10 @@ public class PathWPV2RepositoryConfigMigrationUpdateStep implements UpdateStep {
     }
 
     String path = splitV1Permission[0];
-    String name = splitV1Permission[1].replaceAll("@","");
+    String name = splitV1Permission[1].replace("@", "");
     boolean group = splitV1Permission[1].contains("@");
 
-    return of(new PathWritePermission(path, name, group, Type.ALLOW));
+    return of(new PathWritePermission(path, "*", PathWritePermission.BranchScope.INCLUDE, name, group, Type.ALLOW));
   }
 
   @Override

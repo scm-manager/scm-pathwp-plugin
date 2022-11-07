@@ -23,6 +23,8 @@
  */
 export type PathWP = {
   path: string;
+  branch: string;
+  branchScope: string;
   name: string;
   group: boolean;
   type: string;

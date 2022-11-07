@@ -38,12 +38,16 @@ import sonia.scm.api.v2.resources.HalAppender;
 import sonia.scm.api.v2.resources.HalEnricherContext;
 import sonia.scm.api.v2.resources.ScmPathInfoStore;
 import sonia.scm.repository.Repository;
+import sonia.scm.repository.api.Command;
+import sonia.scm.repository.api.RepositoryService;
+import sonia.scm.repository.api.RepositoryServiceFactory;
 
 import java.net.URI;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @SubjectAware(configuration = "classpath:sonia/scm/pathwp/shiro-001.ini", username = "user_1", password = "secret")
@@ -56,6 +60,10 @@ public class RepositoryLinkEnricherTest {
 
   @Mock
   private HalAppender appender;
+  @Mock
+  private RepositoryServiceFactory serviceFactory;
+  @Mock
+  private RepositoryService repositoryService;
   private RepositoryLinkEnricher enricher;
 
   public RepositoryLinkEnricherTest() {
@@ -74,17 +82,35 @@ public class RepositoryLinkEnricherTest {
 
   @Test
   @SubjectAware(username = "admin", password = "secret")
-  public void shouldEnrich() {
-    enricher = new RepositoryLinkEnricher(scmPathInfoStoreProvider);
+  public void shouldEnrichLinkWithBranches() {
+    enricher = new RepositoryLinkEnricher(scmPathInfoStoreProvider, serviceFactory);
     Repository repo = new Repository("id", "type", "space", "name");
+    when(serviceFactory.create(repo)).thenReturn(repositoryService);
+    when(repositoryService.isSupported(Command.BRANCHES)).thenReturn(true);
     HalEnricherContext context = HalEnricherContext.of(repo);
+
     enricher.enrich(context, appender);
+
+    verify(appender).appendLink("pathWpConfigWithBranches", "https://scm-manager.org/scm/api/v2/plugins/pathwp/space/name");
+  }
+
+  @Test
+  @SubjectAware(username = "admin", password = "secret")
+  public void shouldEnrichLinkWithoutBranches() {
+    enricher = new RepositoryLinkEnricher(scmPathInfoStoreProvider, serviceFactory);
+    Repository repo = new Repository("id", "type", "space", "name");
+    when(serviceFactory.create(repo)).thenReturn(repositoryService);
+    when(repositoryService.isSupported(Command.BRANCHES)).thenReturn(false);
+    HalEnricherContext context = HalEnricherContext.of(repo);
+
+    enricher.enrich(context, appender);
+
     verify(appender).appendLink("pathWpConfig", "https://scm-manager.org/scm/api/v2/plugins/pathwp/space/name");
   }
 
   @Test
   public void shouldNotEnrichBecauseOfMissingPermission() {
-    enricher = new RepositoryLinkEnricher(scmPathInfoStoreProvider);
+    enricher = new RepositoryLinkEnricher(scmPathInfoStoreProvider, serviceFactory);
     Repository repo = new Repository("id", "type", "space", "name");
     HalEnricherContext context = HalEnricherContext.of(repo);
     enricher.enrich(context, appender);

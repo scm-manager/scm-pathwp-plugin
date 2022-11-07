@@ -73,6 +73,8 @@ class PathWPRow extends React.Component<Props> {
           {iconType} {permission.name}
         </VCenteredTd>
         <td>{permission.path}</td>
+        <td>{permission.branch}</td>
+        <td>{permission.branchScope}</td>
         <td>{permission.type}</td>
         <VCenteredTd className="is-darker">
           <a className="level-item" onClick={this.confirmDelete} title={t("scm-pathwp-plugin.table.delete")}>

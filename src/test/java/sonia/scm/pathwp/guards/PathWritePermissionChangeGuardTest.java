@@ -40,8 +40,6 @@ import sonia.scm.repository.RepositoryManager;
 import sonia.scm.user.User;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
@@ -49,7 +47,6 @@ import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -81,8 +78,8 @@ class PathWritePermissionChangeGuardTest {
 
   @BeforeEach
   void mockService() {
-    lenient().doReturn(true).when(service).isPrivileged(eq(USER), eq(REPOSITORY), argThat(argument -> !argument.contains("invalid")));
-    lenient().doReturn(false).when(service).isPrivileged(eq(USER), eq(REPOSITORY), argThat(argument -> argument.contains("invalid")));
+    lenient().doReturn(true).when(service).isPrivileged(eq(USER), eq(REPOSITORY), argThat(argument -> !argument.contains("invalid")), argThat(argument -> !argument.contains("invalid")));
+    lenient().doReturn(false).when(service).isPrivileged(eq(USER), eq(REPOSITORY), argThat(argument -> argument.contains("invalid")), argThat(argument -> argument.contains("invalid")));
   }
 
   @Test

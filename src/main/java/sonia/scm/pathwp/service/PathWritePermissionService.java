@@ -47,9 +47,9 @@ import java.util.function.BooleanSupplier;
 public class PathWritePermissionService {
 
   public static final String PERMISSION_VERB = "pathwp";
-  private ConfigurationStoreFactory storeFactory;
-  private RepositoryManager repositoryManager;
-  private GroupCollector groupCollector;
+  private final ConfigurationStoreFactory storeFactory;
+  private final RepositoryManager repositoryManager;
+  private final GroupCollector groupCollector;
   private static final String STORE_NAME = "pathWritePermission";
 
   @Inject
@@ -67,12 +67,13 @@ public class PathWritePermissionService {
    * <p>
    * The user is not privileged if there is no permission found for him or one of his groups.
    *
-   * @param user
-   * @param repository
-   * @param path
+   * @param user user or group which should be permitted
+   * @param repository the repository on which this rule is applied
+   * @param branch the branch or pattern which will be affected
+   * @param path the path or pattern which will be affected
    * @return true if the user is permitted to write the path
    */
-  public boolean isPrivileged(User user, Repository repository, String path) {
+  public boolean isPrivileged(User user, Repository repository, String branch, String path) {
     AssertUtil.assertIsNotNull(user);
 
     PathWritePermissions permissions = getPermissions(repository);
@@ -82,18 +83,19 @@ public class PathWritePermissionService {
 
     Set<String> userGroups = groupCollector.collect(SecurityUtils.getSubject().getPrincipal().toString());
 
-    BooleanSupplier userAllowed = () -> hasUserPermission(user, path, permissions, PathWritePermission.Type.ALLOW);
-    BooleanSupplier anyUserGroupsAllowed = () -> hasAnyGroupPermission(userGroups, path, permissions, PathWritePermission.Type.ALLOW);
-    BooleanSupplier userDenied = () -> hasUserPermission(user, path, permissions, PathWritePermission.Type.DENY);
-    BooleanSupplier anyUserGroupsDenied = () -> hasAnyGroupPermission(userGroups, path, permissions, PathWritePermission.Type.DENY);
+    BooleanSupplier userAllowed = () -> hasUserPermission(user, branch, path, permissions, PathWritePermission.Type.ALLOW);
+    BooleanSupplier anyUserGroupsAllowed = () -> hasAnyGroupPermission(userGroups, branch, path, permissions, PathWritePermission.Type.ALLOW);
+    BooleanSupplier userDenied = () -> hasUserPermission(user, branch, path, permissions, PathWritePermission.Type.DENY);
+    BooleanSupplier anyUserGroupsDenied = () -> hasAnyGroupPermission(userGroups, path, branch, permissions, PathWritePermission.Type.DENY);
 
     return !userDenied.getAsBoolean() && !anyUserGroupsDenied.getAsBoolean() && (userAllowed.getAsBoolean() || anyUserGroupsAllowed.getAsBoolean());
   }
-  private boolean isPluginEnabled(PathWritePermissions permissions){
+
+  private boolean isPluginEnabled(PathWritePermissions permissions) {
     return permissions.isEnabled();
   }
 
-  public boolean isPluginEnabled(Repository repository){
+  public boolean isPluginEnabled(Repository repository) {
     PathWritePermissions permissions = getPermissions(repository);
     return isPluginEnabled(permissions);
   }
@@ -106,20 +108,29 @@ public class PathWritePermissionService {
     RepositoryPermissions.custom(PERMISSION_VERB, repository).check();
   }
 
-  private boolean hasAnyGroupPermission(Set<String> userGroups, String path, PathWritePermissions permissions, PathWritePermission.Type type) {
+  private boolean hasAnyGroupPermission(Set<String> userGroups, String branch, String path, PathWritePermissions permissions, PathWritePermission.Type type) {
     return permissions.getPermissions().stream()
       .filter(pathWritePermission -> matchPath(path, pathWritePermission))
+      .filter(pathWritePermission -> matchBranch(branch, pathWritePermission))
       .filter(PathWritePermission::isGroup)
       .filter(pathWritePermission -> userGroups.contains(pathWritePermission.getName()))
       .anyMatch(pathWritePermission -> pathWritePermission.getType().equals(type));
   }
 
-  private boolean hasUserPermission(User user, String path, PathWritePermissions permissions, PathWritePermission.Type type) {
+  private boolean hasUserPermission(User user, String branch, String path, PathWritePermissions permissions, PathWritePermission.Type type) {
     return permissions.getPermissions().stream()
       .filter(pathWritePermission -> matchPath(path, pathWritePermission))
+      .filter(pathWritePermission -> matchBranch(branch, pathWritePermission))
       .filter(pathWritePermission -> !pathWritePermission.isGroup())
       .filter(pathWritePermission -> user.getName().equals(pathWritePermission.getName()))
       .anyMatch(pathWritePermission -> pathWritePermission.getType().equals(type));
+  }
+
+  private boolean matchBranch(String branch, PathWritePermission pathWritePermission) {
+    if (pathWritePermission.getBranchScope().equals(PathWritePermission.BranchScope.INCLUDE)) {
+      return GlobUtil.matches(pathWritePermission.getBranch(), branch);
+    }
+    return !GlobUtil.matches(pathWritePermission.getBranch(), branch);
   }
 
   private boolean matchPath(String path, PathWritePermission pathWritePermission) {
