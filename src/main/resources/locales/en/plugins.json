@@ -20,8 +20,8 @@
       "include": "Only branches",
       "exclude": "All branches except",
       "permission": "Permission",
-      "allow": "Allow",
-      "deny": "Deny",
+      "allow": "Allow access for",
+      "deny": "Deny access for",
       "permissionHelpText": "Select the path write permission",
       "add": "Add Permission"
     },
