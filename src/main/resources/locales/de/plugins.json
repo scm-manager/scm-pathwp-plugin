@@ -17,7 +17,11 @@
       "branchHelpText": "Branch-Name oder -Muster für die Einschränkung des Schreibschutzes. Es können Muster wie \"*\" (alle Branches) oder \"bugfix/*\" (alle Bugfix-Branches) genutzt werden.",
       "branchScope": "Branch Filter",
       "branchScopeHelpText": "Art des Filters für Branches.",
+      "include": "Nur die Branches",
+      "exclude": "Alle Branches außer",
       "permission": "Berechtigung",
+      "allow": "Erlaube Zugriff für",
+      "deny": "Verbiete Zugriff für",
       "permissionHelpText": "Auswahl der Berechtigung.",
       "add": "Hinzufügen"
     },
@@ -27,7 +31,11 @@
       "path": "Pfad",
       "branch": "Branch",
       "branchScope": "Branch Filter",
+      "INCLUDE": "Nur die Branches",
+      "EXCLUDE": "Alle Branches außer",
       "permission": "Berechtigung",
+      "ALLOW": "Erlaubt",
+      "DENY": "Verboten",
       "group": "Gruppe",
       "user": "Benutzer",
       "delete": "Löschen"

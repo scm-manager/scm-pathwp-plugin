@@ -34,7 +34,7 @@ type Props = {
 
 export default class PathWPsContainer extends React.Component<Props> {
   render() {
-    const { link, indexLinks } = this.props;
+    const { link, indexLinks, repository } = this.props;
     const userAutoCompleteLink = indexLinks.autocomplete.find(link => link.name === "users").href;
     const groupsAutoCompleteLink = indexLinks.autocomplete.find(link => link.name === "groups").href;
     return (
@@ -45,6 +45,7 @@ export default class PathWPsContainer extends React.Component<Props> {
             {...props}
             userAutocompleteLink={userAutoCompleteLink}
             groupAutocompleteLink={groupsAutoCompleteLink}
+            repository={repository}
           />
         )}
       />

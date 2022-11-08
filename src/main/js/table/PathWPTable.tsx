@@ -30,11 +30,12 @@ import PathWPRow from "./PathWPRow";
 type Props = WithTranslation & {
   permissions: PathWP[];
   onDelete: (p: PathWP) => void;
+  withBranches: boolean;
 };
 
 class PathWPTable extends React.Component<Props> {
   render() {
-    const { permissions, onDelete, t } = this.props;
+    const { permissions, onDelete, withBranches, t } = this.props;
 
     if (permissions && permissions[0]) {
       const tableRows = permissions.map(pathWP => {
@@ -45,6 +46,7 @@ class PathWPTable extends React.Component<Props> {
               onDelete={permission => {
                 onDelete(permission);
               }}
+              withBranches={withBranches}
             />
           </>
         );
@@ -61,8 +63,12 @@ class PathWPTable extends React.Component<Props> {
                 />
               </th>
               <th>{t("scm-pathwp-plugin.table.path")}</th>
-              <th>{t("scm-pathwp-plugin.table.branch")}</th>
-              <th>{t("scm-pathwp-plugin.table.branchScope")}</th>
+              {withBranches ? (
+                <>
+                  <th>{t("scm-pathwp-plugin.table.branchScope")}</th>
+                  <th>{t("scm-pathwp-plugin.table.branch")}</th>
+                </>
+              ) : null}
               <th>{t("scm-pathwp-plugin.table.permission")}</th>
               <th />
             </tr>

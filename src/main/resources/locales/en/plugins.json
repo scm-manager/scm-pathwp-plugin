@@ -17,7 +17,11 @@
       "branchHelpText": "Enter an exact branch name or a pattern. To protect a set of branches use a star at the end of the branch (e.g.: \"bugfix/*\") or only the star for all branches (e.g.: \"*\").",
       "branchScope": "Branch Scope",
       "branchScopeHelpText": "Scope which branches will be affected.",
+      "include": "Only branches",
+      "exclude": "All branches except",
       "permission": "Permission",
+      "allow": "Allow",
+      "deny": "Deny",
       "permissionHelpText": "Select the path write permission",
       "add": "Add Permission"
     },
@@ -27,7 +31,11 @@
       "path": "Path",
       "branch": "Branch",
       "branchScope": "Branch Scope",
+      "INCLUDE": "Only branches",
+      "EXCLUDE": "All branches except",
       "permission": "Permission",
+      "ALLOW": "Allowed",
+      "DENY": "Denied",
       "group": "Group",
       "user": "User",
       "delete": "Delete"
