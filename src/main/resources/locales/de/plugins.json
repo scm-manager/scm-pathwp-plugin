@@ -14,7 +14,7 @@
       "path": "Pfad",
       "pathHelpText": "Eingabe eines Pfadnamen oder eines Musters. Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden (z.B.: trunk/*).",
       "branch": "Branch",
-      "branchHelpText": "Branch-Name oder -Muster für die Einschränkung des Schreibschutzes. Es können Muster wie \"*\" (alle Branches) oder \"bugfix/*\" (alle Bugfix-Branches) genutzt werden.",
+      "branchHelpText": "Branchname oder -muster für die Einschränkung des Schreibschutzes. Es können Muster wie \"*\" (alle Branches) oder \"bugfix/*\" (alle Bugfix-Branches) genutzt werden.",
       "branchScope": "Branch Filter",
       "branchScopeHelpText": "Art des Filters für Branches.",
       "include": "Nur die Branches",

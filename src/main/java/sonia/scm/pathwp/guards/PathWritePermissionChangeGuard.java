@@ -83,7 +83,7 @@ public class PathWritePermissionChangeGuard implements ChangeGuard {
       return of(new ChangeObstacle() {
         @Override
         public String getMessage() {
-          return "The user has no privileges to write path " + path;
+          return "The user has no privileges to write path " + path + " on branch " + branch;
         }
 
         @Override
