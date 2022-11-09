@@ -63,8 +63,8 @@ public class PathWPV2RepositoryConfigMigrationUpdateStepTest {
 
     updateStep.doUpdate();
 
-    PathWritePermission permission1 = new PathWritePermission("/test/777/", "Tony", false, PathWritePermission.Type.ALLOW);
-    PathWritePermission permission2 = new PathWritePermission("/test/path/", "Edi", true, PathWritePermission.Type.ALLOW);
+    PathWritePermission permission1 = new PathWritePermission("/test/777/", "*", PathWritePermission.BranchScope.INCLUDE, "Tony", false, PathWritePermission.Type.ALLOW);
+    PathWritePermission permission2 = new PathWritePermission("/test/path/", "*", PathWritePermission.BranchScope.INCLUDE, "Edi", true, PathWritePermission.Type.ALLOW);
 
     assertThat(getConfigStore().get().getPermissions().get(0).getPath()).isEqualToIgnoringCase(permission1.getPath());
     assertThat(getConfigStore().get().getPermissions().get(0).getName()).isEqualToIgnoringCase(permission1.getName());
@@ -75,7 +75,7 @@ public class PathWPV2RepositoryConfigMigrationUpdateStepTest {
     assertThat(getConfigStore().get().getPermissions().get(1).isGroup()).isEqualTo(permission2.isGroup());
     assertThat(getConfigStore().get().getPermissions().get(1).getType()).isEqualTo(permission2.getType());
     assertThat(getConfigStore().get().isEnabled()).isTrue();
-    assertThat(getConfigStore().get().getPermissions().size()).isEqualTo(3);
+    assertThat(getConfigStore().get().getPermissions()).hasSize(3);
   }
 
   @Test

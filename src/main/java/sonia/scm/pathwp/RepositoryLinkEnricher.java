@@ -33,6 +33,9 @@ import sonia.scm.pathwp.api.PathWritePermissionResource;
 import sonia.scm.pathwp.service.PathWritePermissionService;
 import sonia.scm.plugin.Extension;
 import sonia.scm.repository.Repository;
+import sonia.scm.repository.api.Command;
+import sonia.scm.repository.api.RepositoryService;
+import sonia.scm.repository.api.RepositoryServiceFactory;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -42,10 +45,12 @@ import javax.inject.Provider;
 public class RepositoryLinkEnricher implements HalEnricher {
 
   private final Provider<ScmPathInfoStore> scmPathInfoStoreProvider;
+  private final RepositoryServiceFactory serviceFactory;
 
   @Inject
-  public RepositoryLinkEnricher(Provider<ScmPathInfoStore> scmPathInfoStoreProvider) {
+  public RepositoryLinkEnricher(Provider<ScmPathInfoStore> scmPathInfoStoreProvider, RepositoryServiceFactory serviceFactory) {
     this.scmPathInfoStoreProvider = scmPathInfoStoreProvider;
+    this.serviceFactory = serviceFactory;
   }
 
 
@@ -54,7 +59,17 @@ public class RepositoryLinkEnricher implements HalEnricher {
     Repository repository = context.oneRequireByType(Repository.class);
     if (PathWritePermissionService.isPermitted(repository)) {
       LinkBuilder linkBuilder = new LinkBuilder(scmPathInfoStoreProvider.get().get(), PathWritePermissionResource.class);
-      appender.appendLink("pathWpConfig", linkBuilder.method("get").parameters(repository.getNamespace(), repository.getName()).href());
+      if (doesSupportBranches(repository)) {
+        appender.appendLink("pathWpConfigWithBranches", linkBuilder.method("get").parameters(repository.getNamespace(), repository.getName()).href());
+      } else {
+        appender.appendLink("pathWpConfig", linkBuilder.method("get").parameters(repository.getNamespace(), repository.getName()).href());
+      }
+    }
+  }
+
+  private boolean doesSupportBranches(Repository repository) {
+    try (RepositoryService service = serviceFactory.create(repository)) {
+      return service.isSupported(Command.BRANCHES);
     }
   }
 }

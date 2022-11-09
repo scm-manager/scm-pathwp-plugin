@@ -29,13 +29,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @NoArgsConstructor
 public class PathWritePermissionDto extends HalRepresentation {
 
   private String path;
+  private String branch;
+  private String branchScope;
   private String name;
   private boolean group;
   private String type;

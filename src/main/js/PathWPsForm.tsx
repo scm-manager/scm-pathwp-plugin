@@ -24,9 +24,10 @@
 import React from "react";
 import { WithTranslation, withTranslation } from "react-i18next";
 import { Checkbox, Subtitle } from "@scm-manager/ui-components";
-import { PathWPs, PathWP } from "./types/PathWP";
+import { PathWP, PathWPs } from "./types/PathWP";
 import PathWPTable from "./table/PathWPTable";
 import AddPermissionFormComponent from "./AddPermissionFormComponent";
+import { Repository } from "@scm-manager/ui-types";
 
 type Props = WithTranslation & {
   initialConfiguration: PathWPs;
@@ -34,6 +35,7 @@ type Props = WithTranslation & {
   onConfigurationChange: (p1: PathWPs, p2: boolean) => void;
   userAutocompleteLink: string;
   groupAutocompleteLink: string;
+  repository: Repository;
 };
 
 type State = PathWPs & {};
@@ -101,7 +103,7 @@ class PathWPsForm extends React.Component<Props, State> {
   };
 
   renderAddUserFormComponent = () => {
-    const { readOnly } = this.props;
+    const { readOnly, repository } = this.props;
     if (this.props.userAutocompleteLink) {
       return (
         <AddPermissionFormComponent
@@ -109,6 +111,7 @@ class PathWPsForm extends React.Component<Props, State> {
           groupAutocompleteLink={this.props.groupAutocompleteLink}
           onAdd={this.userPathPermissionAdded}
           readOnly={readOnly}
+          withBranches={!!repository._links.pathWpConfigWithBranches}
         />
       );
     } else return null;
@@ -116,7 +119,7 @@ class PathWPsForm extends React.Component<Props, State> {
 
   render() {
     const { enabled } = this.state;
-    const { t } = this.props;
+    const { t, repository } = this.props;
 
     return (
       <>
@@ -131,7 +134,11 @@ class PathWPsForm extends React.Component<Props, State> {
           <>
             <hr />
             <Subtitle subtitle={t("scm-pathwp-plugin.editSubtitle")} />
-            <PathWPTable permissions={this.state.permissions} onDelete={this.onDelete} />
+            <PathWPTable
+              permissions={this.state.permissions}
+              onDelete={this.onDelete}
+              withBranches={!!repository._links.pathWpConfigWithBranches}
+            />
             {this.renderAddUserFormComponent()}
           </>
         ) : null}

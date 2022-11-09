@@ -15,3 +15,7 @@ Zum Beispiel:
 * *.xml
 
 Eine DENY Berechtigung wiegt stärker als eine ALLOW Berechtigung und kann diese außer Kraft setzen. Hierdurch kann nach einem generellen Berechtigen ein erneuter Ausschluss für bestimmter Teile ermöglicht werden.
+
+#### Nur Git und Mercurial
+Für Git und Mercurial Repositories wird neben dem Pfad noch eine weitere Einschränkung für Branches abgefragt.
+Der Branches Filter kann auch über Namen oder Muster spezifiziert und über die Auswahlbox sogar invertiert werden.

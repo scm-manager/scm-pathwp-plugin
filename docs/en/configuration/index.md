@@ -15,3 +15,7 @@ Examples:
 * *.xml
 
 DENY permissions overrules ALLOW permissions. This allows to first generally allow complete write access and then to limit this access with additional rules.
+
+#### Git and Mercurial only
+For Git and Mercurial repositories, another restriction is performed for branches in addition to the path.
+The branches filter can also be specified by name or pattern and even inverted via the selection box.

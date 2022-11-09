@@ -47,11 +47,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PathWritePermissionResourceTest {
+class PathWritePermissionResourceTest {
 
   public static final String PATH = "dir1/subDir/file1.txt";
+  public static final String BRANCH = "main";
   public static final String PERMISSIONS_JSON = "{\"permissions\":" +
     "[{\"path\":\"" + PATH + "\"," +
+    "\"branch\":\"main\"," +
+    "\"branchScope\":\"INCLUDE\"," +
     "\"name\":\"user_1\"," +
     "\"group\":false," +
     "\"type\":\"ALLOW\"" +
@@ -65,12 +68,11 @@ public class PathWritePermissionResourceTest {
     "\"href\":\"/v2/plugins/pathwp/space/repo\"}" +
     "}" +
     "}";
-  private PathWritePermissionResource resource;
 
   @Mock
   PathWritePermissionService service;
 
-  private PathWritePermissionMapper mapper = new PathWritePermissionMapperImpl();
+  private final PathWritePermissionMapper mapper = new PathWritePermissionMapperImpl();
 
   private RestDispatcher dispatcher;
   private final MockHttpResponse response = new MockHttpResponse();
@@ -78,16 +80,16 @@ public class PathWritePermissionResourceTest {
 
   @BeforeEach
   public void init() {
-    resource = new PathWritePermissionResource(service, mapper);
+    PathWritePermissionResource resource = new PathWritePermissionResource(service, mapper);
     dispatcher = new RestDispatcher();
     dispatcher.addSingletonResource(resource);
   }
 
   @Test
-  public void shouldGetPathWritePermissions() throws URISyntaxException, UnsupportedEncodingException {
+  void shouldGetPathWritePermissions() throws URISyntaxException, UnsupportedEncodingException {
     PathWritePermissions permissions = new PathWritePermissions();
     permissions.setEnabled(true);
-    permissions.getPermissions().add(new PathWritePermission(PATH, "user_1", false, PathWritePermission.Type.ALLOW));
+    permissions.getPermissions().add(new PathWritePermission(PATH, BRANCH, PathWritePermission.BranchScope.INCLUDE, "user_1", false, PathWritePermission.Type.ALLOW));
     when(service.getPermissions("space", "repo")).thenReturn(permissions);
 
     MockHttpRequest request = MockHttpRequest
@@ -102,7 +104,7 @@ public class PathWritePermissionResourceTest {
   }
 
   @Test
-  public void shouldPUTPathWritePermissions() throws URISyntaxException {
+  void shouldPUTPathWritePermissions() throws URISyntaxException {
 
     MockHttpRequest request = MockHttpRequest
       .put("/" + PathWritePermissionResource.PATH + "/space/repo")
@@ -115,8 +117,8 @@ public class PathWritePermissionResourceTest {
     verify(service).setPermissions(eq("space"), eq("repo"), argThat(pathWritePermissions -> {
       PathWritePermissions permissions = new PathWritePermissions();
       permissions.setEnabled(true);
-      permissions.getPermissions().add(new PathWritePermission(PATH, "user_1", false, PathWritePermission.Type.ALLOW));
-      assertThat(pathWritePermissions).isEqualToComparingFieldByFieldRecursively(permissions);
+      permissions.getPermissions().add(new PathWritePermission(PATH, BRANCH, PathWritePermission.BranchScope.INCLUDE, "user_1", false, PathWritePermission.Type.ALLOW));
+      assertThat(pathWritePermissions).usingRecursiveComparison().isEqualTo(permissions);
       return true;
     }));
   }
