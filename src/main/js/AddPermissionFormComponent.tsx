@@ -131,46 +131,6 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
     });
   };
 
-  renderBranches = () => {
-    const { t, readOnly } = this.props;
-    const { pathProtectionPermission } = this.state;
-
-    return (
-      <div className="column">
-        <div className="columns is-3">
-          <div className="column is-align-items-flex-start">
-            <LabelWithHelpIcon
-              label={t("scm-pathwp-plugin.form.branchScope")}
-              helpText={t("scm-pathwp-plugin.form.branchScopeHelpText")}
-            />
-            <Select
-              options={[
-                {
-                  label: t("scm-pathwp-plugin.form.include"),
-                  value: "INCLUDE"
-                },
-                { label: t("scm-pathwp-plugin.form.exclude"), value: "EXCLUDE" }
-              ]}
-              onChange={this.handleBranchScopeChange}
-              disabled={readOnly}
-            />
-          </div>
-          <div className="column is-flex-grow-3">
-            <InputField
-              name={"branch"}
-              placeholder={t("scm-pathwp-plugin.form.branch")}
-              label={t("scm-pathwp-plugin.form.branch")}
-              helpText={t("scm-pathwp-plugin.form.branchHelpText")}
-              value={pathProtectionPermission.branch}
-              onChange={this.handleBranchExpressionChange}
-              disabled={readOnly}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   render() {
     const { t, readOnly, withBranches } = this.props;
     const { pathProtectionPermission } = this.state;
@@ -212,10 +172,41 @@ class AddPermissionFormComponent extends React.Component<Props, State> {
               disabled={readOnly}
             />
           </div>
-
-          {withBranches ? this.renderBranches() : null}
+          {withBranches ? (
+            <div className="column">
+              <div className="columns is-3">
+                <div className="column is-align-items-flex-start">
+                  <LabelWithHelpIcon
+                    label={t("scm-pathwp-plugin.form.branchScope")}
+                    helpText={t("scm-pathwp-plugin.form.branchScopeHelpText")}
+                  />
+                  <Select
+                    options={[
+                      {
+                        label: t("scm-pathwp-plugin.form.include"),
+                        value: "INCLUDE"
+                      },
+                      { label: t("scm-pathwp-plugin.form.exclude"), value: "EXCLUDE" }
+                    ]}
+                    onChange={this.handleBranchScopeChange}
+                    disabled={readOnly}
+                  />
+                </div>
+                <div className="column is-flex-grow-3">
+                  <InputField
+                    name={"branch"}
+                    placeholder={t("scm-pathwp-plugin.form.branch")}
+                    label={t("scm-pathwp-plugin.form.branch")}
+                    helpText={t("scm-pathwp-plugin.form.branchHelpText")}
+                    value={pathProtectionPermission.branch}
+                    onChange={this.handleBranchExpressionChange}
+                    disabled={readOnly}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
-
         <div className="columns">
           <div className="column is-align-items-flex-start">
             <LabelWithHelpIcon
