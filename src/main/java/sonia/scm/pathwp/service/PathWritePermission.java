@@ -50,6 +50,14 @@ public class PathWritePermission implements Serializable {
   private boolean group;
   private Type type;
 
+  public String getBranch() {
+    return branch == null? "*": branch;
+  }
+
+  public sonia.scm.pathwp.service.PathWritePermission.BranchScope getBranchScope() {
+    return branchScope == null? BranchScope.INCLUDE: branchScope;
+  }
+
   public enum Type {
     ALLOW, DENY
   }
