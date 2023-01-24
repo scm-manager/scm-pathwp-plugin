@@ -1,0 +1,2 @@
+- type: fixed
+  description: Error "BRANCH_PROVIDER is not supported" for SVN repositories

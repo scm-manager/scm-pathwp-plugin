@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.UnaryOperator;
 
 /**
  * Receive repository events and Verify the write permission on every path found in the event.
@@ -82,24 +83,36 @@ public class RepositoryHook {
 
     log.trace("received hook for repository {}", repository.getName());
     Set<String> paths = collectPath(context, repository);
-    Set<String> branches = new HashSet<>();
-    branches.addAll(context.getBranchProvider().getCreatedOrModified());
-    branches.addAll(context.getBranchProvider().getDeletedOrClosed());
 
     Subject subject = SecurityUtils.getSubject();
     PrincipalCollection principals = subject.getPrincipals();
 
     User user = principals.oneByType(User.class);
 
-    checkIfUserIsPrivileged(repository, user, branches, paths);
+    if (context.isFeatureSupported(HookFeature.BRANCH_PROVIDER)) {
+      Set<String> branches = new HashSet<>();
+      branches.addAll(context.getBranchProvider().getCreatedOrModified());
+      branches.addAll(context.getBranchProvider().getDeletedOrClosed());
+      checkIfUserIsPrivileged(repository, user, branches, paths);
+    } else {
+      checkIfUserIsPrivileged(repository, user, paths);
+    }
+  }
+
+  private void checkIfUserIsPrivileged(Repository repository, User user, Set<String> paths) {
+    checkIfUserIsPrivileged(repository, user, paths, "*", path -> "Permission denied for the path " + path);
   }
 
   private void checkIfUserIsPrivileged(Repository repository, User user, Set<String> branches, Set<String> paths) {
     for (String branch : branches) {
-      for (String path : paths) {
-        if (!service.isPrivileged(user, repository, branch, path)) {
-          throw new PathWritePermissionException("Permission denied for the path " + path + " on branch " + branch);
-        }
+      checkIfUserIsPrivileged(repository, user, paths, branch, path -> "Permission denied for the path " + path + " on branch " + branch);
+    }
+  }
+
+  private void checkIfUserIsPrivileged(Repository repository, User user, Set<String> paths, String branch, UnaryOperator<String> errorMessage) {
+    for (String path : paths) {
+      if (!service.isPrivileged(user, repository, branch, path)) {
+        throw new PathWritePermissionException(errorMessage.apply(path));
       }
     }
   }

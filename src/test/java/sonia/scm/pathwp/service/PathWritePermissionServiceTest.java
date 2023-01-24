@@ -72,6 +72,10 @@ class PathWritePermissionServiceTest {
   PathWritePermissionService service;
   public static final Repository REPOSITORY = RepositoryTestData.createHeartOfGold();
 
+  static {
+    REPOSITORY.setId("id-1");
+  }
+
   @BeforeEach
   public void init() {
     storeFactory = new InMemoryConfigurationStoreFactory();
