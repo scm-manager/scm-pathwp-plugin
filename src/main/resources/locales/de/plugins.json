@@ -12,7 +12,7 @@
       "userPermission": "Benutzer berechtigen",
       "groupPermission": "Gruppe berechtigen",
       "path": "Pfad",
-      "pathHelpText": "Eingabe eines Pfadnamen oder eines Musters. Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden (z.B.: trunk/*).",
+      "pathHelpText": "Eingabe eines Pfadnamen oder eines Musters (ohne führenden \"\/\"), z.B. \"src/main/java\". Um ein komplettes Verzeichnis zu schützen, kann ein \"*\" am Ende des Pfades verwendet werden, z.B. \"trunk/*\".",
       "branch": "Branch",
       "branchHelpText": "Branchname oder -muster für die Einschränkung des Schreibschutzes. Es können Muster wie \"*\" (alle Branches) oder \"bugfix/*\" (alle Bugfix-Branches) genutzt werden.",
       "branchScope": "Branch Filter",
