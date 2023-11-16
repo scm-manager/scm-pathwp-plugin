@@ -4,6 +4,7 @@
     "subtitle": "Path Permissions",
     "enable": "Enable Path Write Permissions",
     "enableHelpText": "If enabled, nobody can write to the repository except when permitted by the specified rules.",
+    "enableHelpTextWithBranches": "If enabled, nobody can write to the repository except when permitted by the specified rules. This includes the creation and the deletion of matching branches.",
     "editSubtitle": "Write Permissions for Paths",
     "addSubtitle": "Add Permission",
     "noPermissions": "No path permissions found.",
@@ -64,6 +65,12 @@
         "displayName": "modify path permissions",
         "description": "May modify path permissions"
       }
+    }
+  },
+  "errors": {
+    "5bTvfanei1": {
+      "displayName": "Protected by Path Protections",
+      "description": "The change has been prevented by path protections."
     }
   }
 }

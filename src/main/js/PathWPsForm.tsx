@@ -121,6 +121,8 @@ class PathWPsForm extends React.Component<Props, State> {
     const { enabled } = this.state;
     const { t, repository } = this.props;
 
+    const withBranches = !!repository._links.pathWpConfigWithBranches;
+
     return (
       <>
         <Subtitle subtitle={t("scm-pathwp-plugin.subtitle")} />
@@ -128,7 +130,9 @@ class PathWPsForm extends React.Component<Props, State> {
           checked={enabled}
           onChange={this.onChangeEnabled}
           label={t("scm-pathwp-plugin.enable")}
-          helpText={t("scm-pathwp-plugin.enableHelpText")}
+          helpText={
+            withBranches ? t("scm-pathwp-plugin.enableHelpTextWithBranches") : t("scm-pathwp-plugin.enableHelpText")
+          }
         />
         {enabled ? (
           <>
@@ -137,7 +141,7 @@ class PathWPsForm extends React.Component<Props, State> {
             <PathWPTable
               permissions={this.state.permissions}
               onDelete={this.onDelete}
-              withBranches={!!repository._links.pathWpConfigWithBranches}
+              withBranches={withBranches}
             />
             {this.renderAddUserFormComponent()}
           </>

@@ -37,7 +37,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import sonia.scm.FeatureNotSupportedException;
 import sonia.scm.pathwp.service.PathWritePermissionService;
+import sonia.scm.repository.Added;
 import sonia.scm.repository.Changeset;
+import sonia.scm.repository.Modifications;
 import sonia.scm.repository.PreReceiveRepositoryHookEvent;
 import sonia.scm.repository.Repository;
 import sonia.scm.repository.RepositoryTestData;
@@ -125,6 +127,45 @@ class RepositoryHookTest {
       )).thenReturn(false);
 
       Assertions.assertThrows(PathWritePermissionException.class, () -> hook.onEvent(event));
+    }
+
+    @Nested
+    class WithModificationsProvider {
+
+      @BeforeEach
+      void prepareModifications() {
+        when(event.getContext().isFeatureSupported(HookFeature.MODIFICATIONS_PROVIDER)).thenReturn(true);
+        Modifications modifications = new Modifications("42", new Added("modifiedPath"));
+        when(event.getContext().getModificationsProvider().getModifications("branch"))
+          .thenReturn(modifications);
+      }
+
+      @Test
+      @SuppressWarnings("java:S2699") // we only have to make sure that there is no exception
+      void shouldNotFailWithPermission() throws IOException {
+        when(service.isPrivileged(
+          user,
+          repository,
+          "branch",
+          "modifiedPath"
+        )).thenReturn(true);
+
+        hook.onEvent(event);
+
+        // nothing happens
+      }
+
+      @Test
+      void shouldFailWithoutPermission() {
+        when(service.isPrivileged(
+          user,
+          repository,
+          "branch",
+          "modifiedPath"
+        )).thenReturn(false);
+
+        Assertions.assertThrows(PathWritePermissionException.class, () -> hook.onEvent(event));
+      }
     }
   }
 

@@ -23,9 +23,19 @@
  */
 package sonia.scm.pathwp;
 
-public class PathWritePermissionException extends RuntimeException {
+import sonia.scm.ContextEntry;
+import sonia.scm.ExceptionWithContext;
 
-  public PathWritePermissionException(String message) {
-    super(message);
+import java.util.List;
+
+public class PathWritePermissionException extends ExceptionWithContext {
+
+  public PathWritePermissionException(List<ContextEntry> context, String message) {
+    super(context, message);
+  }
+
+  @Override
+  public String getCode() {
+    return "5bTvfanei1";
   }
 }

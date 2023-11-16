@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import sonia.scm.ContextEntry;
 import sonia.scm.EagerSingleton;
 import sonia.scm.pathwp.service.PathWritePermissionService;
 import sonia.scm.plugin.Extension;
@@ -41,8 +42,13 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
+
+import static sonia.scm.ContextEntry.ContextBuilder.entity;
 
 /**
  * Receive repository events and Verify the write permission on every path found in the event.
@@ -93,28 +99,55 @@ public class RepositoryHook {
       Set<String> branches = new HashSet<>();
       branches.addAll(context.getBranchProvider().getCreatedOrModified());
       branches.addAll(context.getBranchProvider().getDeletedOrClosed());
-      checkIfUserIsPrivileged(repository, user, branches, paths);
+      checkIfUserIsPrivileged(context, repository, user, branches, paths);
     } else {
       checkIfUserIsPrivileged(repository, user, paths);
     }
   }
 
   private void checkIfUserIsPrivileged(Repository repository, User user, Set<String> paths) {
-    checkIfUserIsPrivileged(repository, user, paths, "*", path -> "Permission denied for the path " + path);
+    checkIfUserIsPrivileged(
+      repository,
+      user,
+      paths.stream(),
+      "*",
+      path -> entity("Path", path).in(repository).build(),
+      path -> "Permission denied for the path " + path
+    );
   }
 
-  private void checkIfUserIsPrivileged(Repository repository, User user, Set<String> branches, Set<String> paths) {
+  private void checkIfUserIsPrivileged(HookContext context, Repository repository, User user, Set<String> branches, Set<String> allPaths) {
     for (String branch : branches) {
-      checkIfUserIsPrivileged(repository, user, paths, branch, path -> "Permission denied for the path " + path + " on branch " + branch);
+      Stream<String> paths = collectPaths(context, branch, allPaths);
+      checkIfUserIsPrivileged(
+        repository,
+        user,
+        paths,
+        branch,
+        path -> entity("Path", path).in("Branch", branch).in(repository).build(),
+        path -> "Permission denied for the path " + path + " on branch " + branch
+      );
     }
   }
 
-  private void checkIfUserIsPrivileged(Repository repository, User user, Set<String> paths, String branch, UnaryOperator<String> errorMessage) {
-    for (String path : paths) {
-      if (!service.isPrivileged(user, repository, branch, path)) {
-        throw new PathWritePermissionException(errorMessage.apply(path));
-      }
+  private Stream<String> collectPaths(HookContext context, String branch, Set<String> allPaths) {
+    if (context.isFeatureSupported(HookFeature.MODIFICATIONS_PROVIDER)) {
+      return context
+        .getModificationsProvider()
+        .getModifications(branch)
+        .effectedPathsStream();
+    } else {
+      return allPaths.stream();
     }
+
+  }
+
+  private void checkIfUserIsPrivileged(Repository repository, User user, Stream<String> paths, String branch, Function<String, List<ContextEntry>> context, UnaryOperator<String> errorMessage) {
+    paths.forEach(path -> {
+      if (!service.isPrivileged(user, repository, branch, path)) {
+        throw new PathWritePermissionException(context.apply(path), errorMessage.apply(path));
+      }
+    });
   }
 
   private Set<String> collectPath(HookContext eventContext, Repository repository) throws IOException {
