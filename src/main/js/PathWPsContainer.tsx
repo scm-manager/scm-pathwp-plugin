@@ -15,8 +15,10 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Repository } from "@scm-manager/ui-types";
 import { Configuration } from "@scm-manager/ui-components";
+import { Subtitle, useDocumentTitleForRepository } from "@scm-manager/ui-core";
 import PathWPsForm from "./PathWPsForm";
 
 type Props = {
@@ -25,15 +27,19 @@ type Props = {
   indexLinks: object;
 };
 
-export default class PathWPsContainer extends React.Component<Props> {
-  render() {
-    const { link, indexLinks, repository } = this.props;
-    const userAutoCompleteLink = indexLinks.autocomplete.find(link => link.name === "users").href;
-    const groupsAutoCompleteLink = indexLinks.autocomplete.find(link => link.name === "groups").href;
-    return (
+const PathWPsContainer: React.FC<Props> = ({ repository, link, indexLinks }) => {
+  const { t } = useTranslation("plugins");
+  useDocumentTitleForRepository(repository, t("scm-pathwp-plugin.subtitle"));
+
+  const userAutoCompleteLink = indexLinks.autocomplete.find((link: any) => link.name === "users").href;
+  const groupsAutoCompleteLink = indexLinks.autocomplete.find((link: any) => link.name === "groups").href;
+
+  return (
+    <>
+      <Subtitle subtitle={t("scm-pathwp-plugin.subtitle")} />
       <Configuration
         link={link}
-        render={props => (
+        render={(props) => (
           <PathWPsForm
             {...props}
             userAutocompleteLink={userAutoCompleteLink}
@@ -42,6 +48,8 @@ export default class PathWPsContainer extends React.Component<Props> {
           />
         )}
       />
-    );
-  }
-}
+    </>
+  );
+};
+
+export default PathWPsContainer;
