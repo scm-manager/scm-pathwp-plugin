@@ -23,7 +23,7 @@ dependencies {
 }
 
 scmPlugin {
-  scmVersion = "3.7.0"
+  scmVersion = "3.8.1-SNAPSHOT"
   displayName = "Path Write Protection"
   description = "Adds path write protection for repositories"
   author = "Cloudogu GmbH"

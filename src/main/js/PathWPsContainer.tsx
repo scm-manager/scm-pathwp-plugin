@@ -18,7 +18,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Repository } from "@scm-manager/ui-types";
 import { Configuration } from "@scm-manager/ui-components";
-import { Subtitle, useDocumentTitleForRepository } from "@scm-manager/ui-core";
+import { Subtitle } from "@scm-manager/ui-core";
 import PathWPsForm from "./PathWPsForm";
 
 type Props = {
@@ -29,7 +29,6 @@ type Props = {
 
 const PathWPsContainer: React.FC<Props> = ({ repository, link, indexLinks }) => {
   const { t } = useTranslation("plugins");
-  useDocumentTitleForRepository(repository, t("scm-pathwp-plugin.subtitle"));
 
   const userAutoCompleteLink = indexLinks.autocomplete.find((link: any) => link.name === "users").href;
   const groupsAutoCompleteLink = indexLinks.autocomplete.find((link: any) => link.name === "groups").href;
