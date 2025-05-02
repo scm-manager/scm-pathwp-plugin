@@ -14,13 +14,13 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-import React from "react";
-import { WithTranslation, withTranslation } from "react-i18next";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
-import { confirmAlert, Icon } from "@scm-manager/ui-components";
 import { PathWP } from "../types/PathWP";
+import { IconButton, Icon, Dialog, Button } from "@scm-manager/ui-core"
+import { useTranslation } from "react-i18next";
 
-type Props = WithTranslation & {
+type Props = {
   permission: PathWP;
   onDelete: (p: PathWP) => void;
   withBranches: boolean;
@@ -31,60 +31,58 @@ const VCenteredTd = styled.td`
   vertical-align: middle !important;
 `;
 
-class PathWPRow extends React.Component<Props> {
-  confirmDelete = () => {
-    const { t, onDelete, permission } = this.props;
-    confirmAlert({
-      title: t("scm-pathwp-plugin.confirmDeleteAlert.title"),
-      message: t("scm-pathwp-plugin.confirmDeleteAlert.message"),
-      buttons: [
-        {
-          label: t("scm-pathwp-plugin.confirmDeleteAlert.submit"),
-          onClick: () => onDelete(permission)
-        },
-        {
-          className: "is-info",
-          label: t("scm-pathwp-plugin.confirmDeleteAlert.cancel"),
-          onClick: () => null
-        }
-      ]
-    });
-  };
+const PathWPRow: FC<Props> = ({ permission, onDelete, withBranches }) => {
+  const [t] = useTranslation("plugins");
+  const [isOpen, setIsOpen] = useState(false);
 
-  render() {
-    const { permission, withBranches, t } = this.props;
-
-    const iconType =
-      permission && permission.group ? (
-        <Icon title={t("scm-pathwp-plugin.table.group")} name="user-friends" />
-      ) : (
-        <Icon title={t("scm-pathwp-plugin.table.user")} name="user" />
-      );
-
-    return (
-      <tr>
-        <VCenteredTd>
-          {iconType} {permission.name}
-        </VCenteredTd>
-        <td>{permission.path}</td>
-        {withBranches ? (
-          <>
-            <td>{t("scm-pathwp-plugin.table." + permission.branchScope)}</td>
-            <td>{permission.branch}</td>
-          </>
-        ) : null}
-
-        <td>{t("scm-pathwp-plugin.table." + permission.type)}</td>
-        <VCenteredTd className="is-darker">
-          <a className="level-item" onClick={this.confirmDelete} title={t("scm-pathwp-plugin.table.delete")}>
-            <span className="icon is-small">
-              <Icon name="trash" color="inherit" />
-            </span>
-          </a>
-        </VCenteredTd>
-      </tr>
-    );
+  const confirmDelete = () => {
+    setIsOpen(false);
+    onDelete(permission);
   }
-}
 
-export default withTranslation("plugins")(PathWPRow);
+  const iconType = permission && permission.group ? (
+    <Icon>user-friends</Icon>
+  ) : (
+    <Icon>user</Icon>
+  );
+
+  return (
+    <tr>
+      <VCenteredTd>
+        {iconType} {permission.name}
+      </VCenteredTd>
+      <td>{permission.path}</td>
+      {withBranches ? (
+        <>
+          <td>{t("scm-pathwp-plugin.table." + permission.branchScope)}</td>
+          <td>{permission.branch}</td>
+        </>
+      ) : null}
+      <td>{t("scm-pathwp-plugin.table." + permission.type)}</td>
+      <VCenteredTd className="is-darker">
+        <Dialog
+          trigger={
+            <IconButton title={t("scm-pathwp-plugin.table.delete")}>
+              <Icon>trash</Icon>
+            </IconButton>
+          }
+          title={t("scm-pathwp-plugin.confirmDeleteAlert.title")}
+          footer={[
+            <Button onClick={confirmDelete}>
+              {t("scm-pathwp-plugin.confirmDeleteAlert.submit")}
+            </Button>,
+            <Button variant="primary" autoFocus onClick={() => setIsOpen(false)}>
+              {t("scm-pathwp-plugin.confirmDeleteAlert.cancel")}
+            </Button>
+          ]}
+          open={isOpen}
+          onOpenChange={setIsOpen}
+        >
+          {t("scm-pathwp-plugin.confirmDeleteAlert.message")}
+        </Dialog>
+      </VCenteredTd>
+    </tr>
+  );
+};
+
+export default PathWPRow;
