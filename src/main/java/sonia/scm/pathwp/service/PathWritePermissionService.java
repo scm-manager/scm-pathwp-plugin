@@ -79,7 +79,7 @@ public class PathWritePermissionService {
     BooleanSupplier userAllowed = () -> hasUserPermission(user, branch, path, permissions, PathWritePermission.Type.ALLOW);
     BooleanSupplier anyUserGroupsAllowed = () -> hasAnyGroupPermission(userGroups, branch, path, permissions, PathWritePermission.Type.ALLOW);
     BooleanSupplier userDenied = () -> hasUserPermission(user, branch, path, permissions, PathWritePermission.Type.DENY);
-    BooleanSupplier anyUserGroupsDenied = () -> hasAnyGroupPermission(userGroups, path, branch, permissions, PathWritePermission.Type.DENY);
+    BooleanSupplier anyUserGroupsDenied = () -> hasAnyGroupPermission(userGroups, branch, path, permissions, PathWritePermission.Type.DENY);
 
     return !userDenied.getAsBoolean() && !anyUserGroupsDenied.getAsBoolean() && (userAllowed.getAsBoolean() || anyUserGroupsAllowed.getAsBoolean());
   }

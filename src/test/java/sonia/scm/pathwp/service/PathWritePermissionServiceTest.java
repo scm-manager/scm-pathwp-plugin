@@ -216,6 +216,21 @@ class PathWritePermissionServiceTest {
     }
 
     @Test
+    void shouldDenyPermissionBecauseAllPathsAreAllowedToOneOfTheUserGroupsButTheSearchedPathIsDeniedToTheGroup() {
+      PathWritePermissions permissions = new PathWritePermissions();
+      PathWritePermission allowedPermission = new PathWritePermission("*", BRANCH, PathWritePermission.BranchScope.INCLUDE, GROUP_NAME, true, PathWritePermission.Type.ALLOW);
+      PathWritePermission deniedPermission = new PathWritePermission(PATH, BRANCH, PathWritePermission.BranchScope.INCLUDE, GROUP_NAME, true, PathWritePermission.Type.DENY);
+      permissions.getPermissions().add(allowedPermission);
+      permissions.getPermissions().add(deniedPermission);
+      permissions.setEnabled(true);
+      service.setPermissions(REPOSITORY, permissions);
+
+      boolean privileged = service.isPrivileged(USER, REPOSITORY, BRANCH, PATH);
+
+      assertThat(privileged).isFalse();
+    }
+
+    @Test
     void shouldDenyPermissionBecauseTheSearchedPathIsDenied() {
       PathWritePermissions permissions = new PathWritePermissions();
       PathWritePermission deniedPermission = new PathWritePermission(PATH, BRANCH, PathWritePermission.BranchScope.INCLUDE, USER.getName(), false, PathWritePermission.Type.DENY);
