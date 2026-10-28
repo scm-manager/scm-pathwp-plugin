@@ -14,255 +14,196 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-import React from "react";
-import { WithTranslation, withTranslation } from "react-i18next";
-import { SelectValue } from "@scm-manager/ui-types";
-import {
-  Button,
-  GroupAutocomplete,
-  InputField,
-  LabelWithHelpIcon,
-  Radio,
-  Select,
-  Subtitle,
-  UserAutocomplete
-} from "@scm-manager/ui-components";
+import * as React from "react";
+import { useState, ChangeEvent } from "react";
+import { useTranslation } from "react-i18next";
+import { Autocomplete, InputField, Radio } from "@scm-manager/ui-components";
 import { PathWP } from "./types/PathWP";
+import { useIndexLinks } from "@scm-manager/ui-api";
+import { Link } from "@scm-manager/ui-types";
+import { Button, Label, Select, Subtitle } from "@scm-manager/ui-core";
+import { Option } from "@scm-manager/ui-types/src/Option";
+import { AutocompleteObject } from "@scm-manager/ui-types/src/Autocomplete";
 
-type Props = WithTranslation & {
-  userAutocompleteLink: string;
-  groupAutocompleteLink: string;
+type Props = {
   readOnly: boolean;
   onAdd: (p: PathWP) => void;
   withBranches: boolean;
 };
 
-type State = {
-  pathProtectionPermission: PathWP;
-  selectedValue?: SelectValue;
+const defaultPermission: PathWP = {
+  name: "",
+  type: "ALLOW",
+  path: "",
+  branch: "*",
+  branchScope: "INCLUDE",
+  group: false,
 };
 
-const defaultState = {
-  pathProtectionPermission: {
-    name: "",
-    type: "ALLOW",
-    path: "",
-    branch: "*",
-    branchScope: "INCLUDE",
-    group: false
-  },
-  selectedValue: undefined
+const useAutoCompleteLinks = () => {
+  const links = useIndexLinks()?.autocomplete as Link[];
+  return {
+    groups: links?.find((l) => l.name === "groups"),
+    users: links?.find((l) => l.name === "users"),
+  };
 };
 
-class AddPermissionFormComponent extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = defaultState;
-  }
+const AddPermissionFormComponent: React.FC<Props> = ({ readOnly, onAdd, withBranches }) => {
+  const { t } = useTranslation("plugins");
 
-  handleTypeChange = (type: SelectValue) => {
-    this.setState({
-      pathProtectionPermission: {
-        ...this.state.pathProtectionPermission,
-        type
-      }
-    });
+  const [pathProtectionPermission, setPathProtectionPermission] = useState<PathWP>(defaultPermission);
+  const [selectedValue, setSelectedValue] = useState<Option<AutocompleteObject> | undefined>(undefined);
+  const links = useAutoCompleteLinks();
+
+  const { path, branch, group, type, branchScope } = pathProtectionPermission;
+
+  // Korrektur: Nutzt das native ChangeEvent und extrahiert den string-Wert (.target.value)
+  const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    setPathProtectionPermission((prev) => ({ ...prev, type: value }));
   };
 
-  handleBranchScopeChange = (branchScope: SelectValue) => {
-    this.setState({
-      pathProtectionPermission: {
-        ...this.state.pathProtectionPermission,
-        branchScope: branchScope
-      }
-    });
+  const handleBranchScopeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    setPathProtectionPermission((prev) => ({ ...prev, branchScope: value }));
   };
 
-  selectName = (selection: SelectValue) => {
-    this.setState({
-      pathProtectionPermission: {
-        ...this.state.pathProtectionPermission,
-        name: selection.value.id
-      },
-      selectedValue: selection
-    });
+  const selectName = (selection: Option<AutocompleteObject> | null) => {
+    if (!selection) {
+      setPathProtectionPermission((prev) => ({ ...prev, name: "" }));
+      setSelectedValue(undefined);
+      return;
+    }
+    setPathProtectionPermission((prev) => ({ ...prev, name: selection.value.id }));
+    setSelectedValue(selection);
   };
 
-  handlePathExpressionChange = (path: string) => {
-    this.setState({
-      pathProtectionPermission: {
-        ...this.state.pathProtectionPermission,
-        path
-      }
-    });
+  const handlePathExpressionChange = (newPath: string) => {
+    setPathProtectionPermission((prev) => ({ ...prev, path: newPath }));
   };
 
-  handleBranchExpressionChange = (branch: string) => {
-    this.setState({
-      pathProtectionPermission: {
-        ...this.state.pathProtectionPermission,
-        branch
-      }
-    });
+  const handleBranchExpressionChange = (newBranch: string) => {
+    setPathProtectionPermission((prev) => ({ ...prev, branch: newBranch }));
   };
 
-  choosePermissionUserScope = () => {
-    this.changePermissionScope(false);
+  const changePermissionScope = (isGroup: boolean) => {
+    setPathProtectionPermission((prev) => ({ ...prev, group: isGroup, name: "" }));
+    setSelectedValue(undefined);
   };
 
-  choosePermissionGroupScope = () => {
-    this.changePermissionScope(true);
+  const handleAdd = () => {
+    onAdd(pathProtectionPermission);
+    setPathProtectionPermission((prev) => ({
+      ...defaultPermission,
+      path: prev.path,
+      type: prev.type,
+      branch: prev.branch,
+      branchScope: prev.branchScope,
+      group: prev.group,
+    }));
+    setSelectedValue(undefined);
   };
 
-  changePermissionScope = (group: boolean) => {
-    this.setState({
-      pathProtectionPermission: {
-        ...this.state.pathProtectionPermission,
-        group
-      },
-      selectedValue: undefined
-    });
-  };
-
-  render() {
-    const { t, readOnly, withBranches } = this.props;
-    const { pathProtectionPermission } = this.state;
-    const { path, branch } = pathProtectionPermission;
-
-    return (
-      <>
-        <hr />
-        <Subtitle subtitle={t("scm-pathwp-plugin.addSubtitle")} />
-        <div className="columns is-multiline">
-          <div className="column is-full">
-            <label className="label">{t("scm-pathwp-plugin.form.permissionType")}</label>
-            <div className="field is-grouped">
-              <div className="control">
-                <Radio
-                  label={t("scm-pathwp-plugin.form.userPermission")}
-                  name="permission_scope"
-                  checked={!this.state.pathProtectionPermission.group}
-                  onChange={this.choosePermissionUserScope}
-                />
-                <Radio
-                  label={t("scm-pathwp-plugin.form.groupPermission")}
-                  name="permission_scope"
-                  checked={this.state.pathProtectionPermission.group}
-                  onChange={this.choosePermissionGroupScope}
-                />
-              </div>
+  return (
+    <>
+      <hr />
+      <Subtitle subtitle={t("scm-pathwp-plugin.addSubtitle")} />
+      <div className="columns is-multiline">
+        <div className="column is-full">
+          <label className="label">{t("scm-pathwp-plugin.form.permissionType")}</label>
+          <div className="field is-grouped">
+            <div className="control">
+              <Radio
+                label={t("scm-pathwp-plugin.form.userPermission")}
+                name="permission_scope"
+                checked={!group}
+                onChange={() => changePermissionScope(false)}
+                disabled={readOnly}
+              />
+              <Radio
+                label={t("scm-pathwp-plugin.form.groupPermission")}
+                name="permission_scope"
+                checked={group}
+                onChange={() => changePermissionScope(true)}
+                disabled={readOnly}
+              />
             </div>
           </div>
+        </div>
 
-          <div className="column is-full">
-            <InputField
-              name={"path"}
-              placeholder={t("scm-pathwp-plugin.form.path")}
-              label={t("scm-pathwp-plugin.form.path")}
-              helpText={t("scm-pathwp-plugin.form.pathHelpText")}
-              value={path}
-              onChange={this.handlePathExpressionChange}
-              disabled={readOnly}
-            />
-          </div>
-          {withBranches ? (
-            <div className="column">
-              <div className="columns is-3">
-                <div className="column is-align-items-flex-start">
-                  <LabelWithHelpIcon
-                    label={t("scm-pathwp-plugin.form.branchScope")}
-                    helpText={t("scm-pathwp-plugin.form.branchScopeHelpText")}
-                  />
-                  <Select
-                    options={[
-                      {
-                        label: t("scm-pathwp-plugin.form.include"),
-                        value: "INCLUDE"
-                      },
-                      { label: t("scm-pathwp-plugin.form.exclude"), value: "EXCLUDE" }
-                    ]}
-                    onChange={this.handleBranchScopeChange}
-                    disabled={readOnly}
-                  />
-                </div>
-                <div className="column is-flex-grow-3">
-                  <InputField
-                    name={"branch"}
-                    placeholder={t("scm-pathwp-plugin.form.branch")}
-                    label={t("scm-pathwp-plugin.form.branch")}
-                    helpText={t("scm-pathwp-plugin.form.branchHelpText")}
-                    value={pathProtectionPermission.branch}
-                    onChange={this.handleBranchExpressionChange}
-                    disabled={readOnly}
-                  />
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </div>
-        <div className="columns">
-          <div className="column is-align-items-flex-start">
-            <LabelWithHelpIcon
-              label={t("scm-pathwp-plugin.form.permission")}
-              helpText={t("scm-pathwp-plugin.form.permissionHelpText")}
-            />
-            <Select
-              options={[
-                { label: t("scm-pathwp-plugin.form.allow"), value: "ALLOW" },
-                { label: t("scm-pathwp-plugin.form.deny"), value: "DENY" }
-              ]}
-              onChange={this.handleTypeChange}
-              disabled={readOnly}
-            />
-          </div>
-          <div className="column is-flex-grow-3">{this.renderAutocomplete()}</div>
-        </div>
-        <div className="is-flex is-justify-content-flex-end">
-          <Button
-            className="is-flex is-align-self-flex-end"
-            label={t("scm-pathwp-plugin.form.add")}
-            disabled={
-              this.props.readOnly || !path || !branch || !(this.state.selectedValue && this.state.selectedValue.label)
-            }
-            action={() => {
-              this.props.onAdd(this.state.pathProtectionPermission);
-              this.setState({
-                ...defaultState,
-                pathProtectionPermission: {
-                  ...defaultState.pathProtectionPermission,
-                  path: pathProtectionPermission.path,
-                  type: pathProtectionPermission.type,
-                  branch: pathProtectionPermission.branch,
-                  branchScope: pathProtectionPermission.branchScope,
-                  group: pathProtectionPermission.group
-                }
-              });
-            }}
+        <div className="column is-full">
+          <InputField
+            name="path"
+            placeholder={t("scm-pathwp-plugin.form.path")}
+            label={t("scm-pathwp-plugin.form.path")}
+            helpText={t("scm-pathwp-plugin.form.pathHelpText")}
+            value={path}
+            onChange={handlePathExpressionChange}
+            disabled={readOnly}
           />
         </div>
-      </>
-    );
-  }
+        {withBranches && (
+          <div className="column">
+            <div className="columns is-3">
+              <div className="column is-align-items-flex-start">
+                <Label>{t("scm-pathwp-plugin.form.branchScope")}</Label>
+                <Select
+                  options={[
+                    { label: t("scm-pathwp-plugin.form.include"), value: "INCLUDE" },
+                    { label: t("scm-pathwp-plugin.form.exclude"), value: "EXCLUDE" },
+                  ]}
+                  value={branchScope}
+                  onChange={handleBranchScopeChange}
+                  disabled={readOnly}
+                />
+              </div>
+              <div className="column is-flex-grow-3">
+                <InputField
+                  name="branch"
+                  placeholder={t("scm-pathwp-plugin.form.branch")}
+                  label={t("scm-pathwp-plugin.form.branch")}
+                  helpText={t("scm-pathwp-plugin.form.branchHelpText")}
+                  value={branch}
+                  onChange={handleBranchExpressionChange}
+                  disabled={readOnly}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="columns">
+        <div className="column is-align-items-flex-start">
+          <Label>{t("scm-pathwp-plugin.form.permission")}</Label>
+          <Select
+            options={[
+              { label: t("scm-pathwp-plugin.form.allow"), value: "ALLOW" },
+              { label: t("scm-pathwp-plugin.form.deny"), value: "DENY" },
+            ]}
+            value={type}
+            onChange={handleTypeChange}
+            disabled={readOnly}
+          />
+        </div>
+        <div className="column is-flex-grow-3">
+          <Autocomplete
+            type={group ? "group" : "user"}
+            autocompleteLink={group ? links.groups?.href : links.users?.href}
+            onSelect={selectName}
+          />
+        </div>
+      </div>
+      <div className="is-flex is-justify-content-flex-end">
+        <Button
+          className="is-flex is-align-self-flex-end"
+          disabled={readOnly || !path || !branch || !selectedValue?.label}
+          onClick={handleAdd}
+        >
+          {t("scm-pathwp-plugin.form.add")}
+        </Button>
+      </div>
+    </>
+  );
+};
 
-  renderAutocomplete = () => {
-    const group = this.state.pathProtectionPermission.group;
-    if (group) {
-      return (
-        <GroupAutocomplete
-          autocompleteLink={this.props.groupAutocompleteLink}
-          valueSelected={this.selectName}
-          value={this.state.selectedValue ? this.state.selectedValue : ""}
-        />
-      );
-    }
-    return (
-      <UserAutocomplete
-        autocompleteLink={this.props.userAutocompleteLink}
-        valueSelected={this.selectName}
-        value={this.state.selectedValue ? this.state.selectedValue : ""}
-      />
-    );
-  };
-}
-
-export default withTranslation("plugins")(AddPermissionFormComponent);
+export default AddPermissionFormComponent;

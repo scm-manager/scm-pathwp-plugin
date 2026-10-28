@@ -14,9 +14,9 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-import React from "react";
+import * as React from "react";
 import { WithTranslation, withTranslation } from "react-i18next";
-import { LabelWithHelpIcon, Notification } from "@scm-manager/ui-components";
+import { Notification } from "@scm-manager/ui-core";
 import { PathWP } from "../types/PathWP";
 import PathWPRow from "./PathWPRow";
 
@@ -31,12 +31,12 @@ class PathWPTable extends React.Component<Props> {
     const { permissions, onDelete, withBranches, t } = this.props;
 
     if (permissions && permissions[0]) {
-      const tableRows = permissions.map(pathWP => {
+      const tableRows = permissions.map((pathWP) => {
         return (
           <>
             <PathWPRow
               permission={pathWP}
-              onDelete={permission => {
+              onDelete={(permission) => {
                 onDelete(permission);
               }}
               withBranches={withBranches}
@@ -49,12 +49,6 @@ class PathWPTable extends React.Component<Props> {
         <table className="card-table table is-hoverable is-fullwidth">
           <thead>
             <tr>
-              <th>
-                <LabelWithHelpIcon
-                  label={t("scm-pathwp-plugin.table.name")}
-                  helpText={t("scm-pathwp-plugin.table.nameHelpText")}
-                />
-              </th>
               <th>{t("scm-pathwp-plugin.table.path")}</th>
               {withBranches ? (
                 <>

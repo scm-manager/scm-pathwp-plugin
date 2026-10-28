@@ -14,20 +14,19 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-import React from "react";
+import * as React from "react";
 import { WithTranslation, withTranslation } from "react-i18next";
-import { Checkbox, Subtitle } from "@scm-manager/ui-components";
+import { Checkbox } from "@scm-manager/ui-components";
 import { PathWP, PathWPs } from "./types/PathWP";
 import PathWPTable from "./table/PathWPTable";
 import AddPermissionFormComponent from "./AddPermissionFormComponent";
 import { Repository } from "@scm-manager/ui-types";
+import { Subtitle } from "@scm-manager/ui-core";
 
 type Props = WithTranslation & {
   initialConfiguration: PathWPs;
   readOnly: boolean;
   onConfigurationChange: (p1: PathWPs, p2: boolean) => void;
-  userAutocompleteLink: string;
-  groupAutocompleteLink: string;
   repository: Repository;
 };
 
@@ -37,14 +36,14 @@ class PathWPsForm extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      ...props.initialConfiguration
+      ...props.initialConfiguration,
     };
   }
 
   isValid() {
     const { permissions } = this.state;
     let valid = true;
-    permissions.map(pathWP => {
+    permissions.map((pathWP) => {
       valid = valid && pathWP.name.trim() !== "" && pathWP.path.trim() !== "" && pathWP.type.trim() !== "";
     });
     return valid;
@@ -53,22 +52,16 @@ class PathWPsForm extends React.Component<Props, State> {
   updatePathWPs(permissions) {
     this.setState(
       {
-        permissions
+        permissions,
       },
-      () => this.props.onConfigurationChange(this.state, this.isValid())
+      () => this.props.onConfigurationChange(this.state, this.isValid()),
     );
   }
 
-  onDelete = deletedPathWP => {
+  onDelete = (deletedPathWP) => {
     const { permissions } = this.state;
     const index = permissions.indexOf(deletedPathWP);
     permissions.splice(index, 1);
-    this.updatePathWPs(permissions);
-  };
-
-  onChange = (changedPathWP, index) => {
-    const { permissions } = this.state;
-    permissions[index] = changedPathWP;
     this.updatePathWPs(permissions);
   };
 
@@ -76,38 +69,34 @@ class PathWPsForm extends React.Component<Props, State> {
     this.setState(
       {
         ...this.state,
-        permissions: [...this.state.permissions, permission]
+        permissions: [...this.state.permissions, permission],
       },
       () => {
         this.props.onConfigurationChange(this.state, this.isValid());
-      }
+      },
     );
   };
 
-  onChangeEnabled = isEnabled => {
+  onChangeEnabled = (isEnabled) => {
     this.setState(
       {
-        enabled: isEnabled
+        enabled: isEnabled,
       },
       () => {
         this.props.onConfigurationChange(this.state, this.isValid());
-      }
+      },
     );
   };
 
   renderAddUserFormComponent = () => {
     const { readOnly, repository } = this.props;
-    if (this.props.userAutocompleteLink) {
-      return (
-        <AddPermissionFormComponent
-          userAutocompleteLink={this.props.userAutocompleteLink}
-          groupAutocompleteLink={this.props.groupAutocompleteLink}
-          onAdd={this.userPathPermissionAdded}
-          readOnly={readOnly}
-          withBranches={!!repository._links.pathWpConfigWithBranches}
-        />
-      );
-    } else return null;
+    return (
+      <AddPermissionFormComponent
+        onAdd={this.userPathPermissionAdded}
+        readOnly={readOnly}
+        withBranches={!!repository._links.pathWpConfigWithBranches}
+      />
+    );
   };
 
   render() {
@@ -118,23 +107,12 @@ class PathWPsForm extends React.Component<Props, State> {
 
     return (
       <>
-        <Checkbox
-          checked={enabled}
-          onChange={this.onChangeEnabled}
-          label={t("scm-pathwp-plugin.enable")}
-          helpText={
-            withBranches ? t("scm-pathwp-plugin.enableHelpTextWithBranches") : t("scm-pathwp-plugin.enableHelpText")
-          }
-        />
+        <Checkbox checked={enabled} onChange={this.onChangeEnabled} label={t("scm-pathwp-plugin.enable")} />
         {enabled ? (
           <>
             <hr />
             <Subtitle subtitle={t("scm-pathwp-plugin.editSubtitle")} />
-            <PathWPTable
-              permissions={this.state.permissions}
-              onDelete={this.onDelete}
-              withBranches={withBranches}
-            />
+            <PathWPTable permissions={this.state.permissions} onDelete={this.onDelete} withBranches={withBranches} />
             {this.renderAddUserFormComponent()}
           </>
         ) : null}

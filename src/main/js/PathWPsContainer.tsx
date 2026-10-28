@@ -14,39 +14,24 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-import React from "react";
+import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Repository } from "@scm-manager/ui-types";
 import { Configuration } from "@scm-manager/ui-components";
-import { Subtitle } from "@scm-manager/ui-core";
+import { Subtitle, useRepositoryFromParams } from "@scm-manager/ui-core";
 import PathWPsForm from "./PathWPsForm";
+import {Link, Repository} from "@scm-manager/ui-types";
 
-type Props = {
-  repository: Repository;
-  link: string;
-  indexLinks: object;
-};
-
-const PathWPsContainer: React.FC<Props> = ({ repository, link, indexLinks }) => {
+const PathWPsContainer: React.FC = ({}) => {
   const { t } = useTranslation("plugins");
+  const repository = useRepositoryFromParams();
 
-  const userAutoCompleteLink = indexLinks.autocomplete.find((link: any) => link.name === "users").href;
-  const groupsAutoCompleteLink = indexLinks.autocomplete.find((link: any) => link.name === "groups").href;
+  let link = (repository._links?.["pathWpConfigWithBranches"] as Link)?.href
+    ?? (repository._links?.["pathWpConfig"] as Link)?.href;
 
   return (
     <>
       <Subtitle subtitle={t("scm-pathwp-plugin.subtitle")} />
-      <Configuration
-        link={link}
-        render={(props) => (
-          <PathWPsForm
-            {...props}
-            userAutocompleteLink={userAutoCompleteLink}
-            groupAutocompleteLink={groupsAutoCompleteLink}
-            repository={repository}
-          />
-        )}
-      />
+      <Configuration link={link} render={(props) => <PathWPsForm {...props} repository={repository} />} />
     </>
   );
 };

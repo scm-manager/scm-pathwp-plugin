@@ -19,11 +19,11 @@ plugins {
 }
 
 dependencies {
-  optionalPlugin "sonia.scm.plugins:scm-editor-plugin:2.13.0"
+  optionalPlugin "sonia.scm.plugins:scm-editor-plugin:4.0.0-SNAPSHOT"
 }
 
 scmPlugin {
-  scmVersion = "3.9.0"
+  scmVersion = "4.0.0-SNAPSHOT"
   displayName = "Path Write Protection"
   description = "Adds path write protection for repositories"
   author = "Cloudogu GmbH"

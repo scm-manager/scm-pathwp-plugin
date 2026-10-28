@@ -14,10 +14,11 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-import React, { FC, useState } from "react";
+import * as React from "react";
+import { FC, useState } from "react";
 import styled from "styled-components";
 import { PathWP } from "../types/PathWP";
-import { IconButton, Icon, Dialog, Button } from "@scm-manager/ui-core"
+import { IconButton, Icon, Dialog, Button } from "@scm-manager/ui-core";
 import { useTranslation } from "react-i18next";
 
 type Props = {
@@ -38,13 +39,9 @@ const PathWPRow: FC<Props> = ({ permission, onDelete, withBranches }) => {
   const confirmDelete = () => {
     setIsOpen(false);
     onDelete(permission);
-  }
+  };
 
-  const iconType = permission && permission.group ? (
-    <Icon>user-friends</Icon>
-  ) : (
-    <Icon>user</Icon>
-  );
+  const iconType = permission && permission.group ? <Icon>user-friends</Icon> : <Icon>user</Icon>;
 
   return (
     <tr>
@@ -68,12 +65,10 @@ const PathWPRow: FC<Props> = ({ permission, onDelete, withBranches }) => {
           }
           title={t("scm-pathwp-plugin.confirmDeleteAlert.title")}
           footer={[
-            <Button onClick={confirmDelete}>
-              {t("scm-pathwp-plugin.confirmDeleteAlert.submit")}
-            </Button>,
+            <Button onClick={confirmDelete}>{t("scm-pathwp-plugin.confirmDeleteAlert.submit")}</Button>,
             <Button variant="primary" autoFocus onClick={() => setIsOpen(false)}>
               {t("scm-pathwp-plugin.confirmDeleteAlert.cancel")}
-            </Button>
+            </Button>,
           ]}
           open={isOpen}
           onOpenChange={setIsOpen}
